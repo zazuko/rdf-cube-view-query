@@ -23,6 +23,32 @@ program
 
       cube.dimensions.forEach(dimension => {
         console.log(`  dimension: <${dimension.path.value}>`)
+
+        if (dimension.datatype) {
+          console.log(`    datatype: <${dimension.datatype.value}>`)
+        }
+
+        if (dimension.minExclusive) {
+          console.log(`    minExclusive: ${dimension.minExclusive.value}`)
+        }
+
+        if (dimension.minInclusive) {
+          console.log(`    minInclusive: ${dimension.minInclusive.value}`)
+        }
+
+        if (dimension.maxExclusive) {
+          console.log(`    maxExclusive: ${dimension.maxExclusive.value}`)
+        }
+
+        if (dimension.maxInclusive) {
+          console.log(`    maxInclusive: ${dimension.maxInclusive.value}`)
+        }
+
+        if (dimension.in) {
+          for (const option of dimension.in) {
+            console.log(`    in: ${option.value}`)
+          }
+        }
       })
     }
   })
