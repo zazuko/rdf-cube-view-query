@@ -99,7 +99,7 @@ program
         return filters
       }, [])
 
-      const customView = View.fromCube(cube, { dimensions, filters })
+      const customView = new View({ dimensions, filters })
       const observations = await customView.observations()
 
       console.log(toCsv(observations))

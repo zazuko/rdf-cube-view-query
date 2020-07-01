@@ -63,7 +63,7 @@ async function main () {
   const filters = [dateGteFilter, dateLtFilter]
 
   // now let's create again a view from a cube, but only with the selected dimensions and built filters
-  const customView = View.fromCube(thermometerCube, { dimensions, filters })
+  const customView = new View({ dimensions, filters })
 
   // and finally let's fetch the observations
   const observations = await customView.observations()

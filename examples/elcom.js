@@ -1,4 +1,4 @@
-const { Source, View } = require('..')
+const { Dimension, LookupSource, Source, View } = require('..')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
 
@@ -21,7 +21,7 @@ async function main () {
   })
 
   // the source can be used to search for cubes on the endpoint in the given named graph
-  const cubes = await source.cubes()
+  /* const cubes = await source.cubes()
 
   // all available cubes are returned as an array and can be searched based on the metadata
   const tariffsCube = cubes.find(cube => {
@@ -29,7 +29,10 @@ async function main () {
     return cube.out(ns.schema.name).terms
       .filter(term => term.language === 'en')
       .some(term => term.value === 'Electricity tariff per provider')
-  })
+  }) */
+
+  // or if you know what you are looking for, just use the IRI
+  const tariffsCube = await source.cube('https://energy.ld.admin.ch/elcom/energy-pricing/cube')
 
   // now let's create a view from the cube, which is required to get the observations
   const tariffsView = View.fromCube(tariffsCube)
@@ -37,9 +40,7 @@ async function main () {
   const dimensions = tariffsView.dimensions
 
   // let's find the period dimension based on the IRI of the cube dimension
-  const periodDimension = dimensions.find(dimension => {
-    return dimension.cubeDimensions.some(cubeDimension => cubeDimension.path.equals(ns.energyPricing.period))
-  })
+  const periodDimension = tariffsView.dimension({cubeDimension: ns.energyPricing.period})
 
   // the datatype and ranges are available from the cube dimension
   const periodDatatype = periodDimension.cubeDimensions[0].datatype
@@ -51,9 +52,7 @@ async function main () {
   const periodFilter = periodDimension.filter.gte(rdf.literal(periodMean, periodDatatype))
 
   // let's find the municipality dimension based on the IRI of the cube dimension
-  const municipalityDimension = dimensions.find(dimension => {
-    return dimension.cubeDimensions.some(cubeDimension => cubeDimension.path.equals(ns.energyPricing.municipality))
-  })
+  const municipalityDimension = tariffsView.dimension({cubeDimension: ns.energyPricing.municipality})
 
   // the municipality dimension as an option list available in the cube dimension as in property
   const municipalities = municipalityDimension.cubeDimensions[0].in
@@ -64,7 +63,7 @@ async function main () {
   const filters = [periodFilter, municipalityFilter]
 
   // now let's create again a view from a cube, but only with the selected dimensions and built filters
-  const customView = View.fromCube(tariffsCube, { dimensions, filters })
+  const customView = new View({ dimensions, filters })
 
   // and finally let's fetch the observations
   const observations = await customView.observations()
