@@ -69,6 +69,17 @@ async function main () {
   const observations = await customView.observations()
 
   console.log(observations)
+
+  const sizeBefore = thermometerView.ptr.dataset.size
+  thermometerView.clear()
+  const sizeAfter = thermometerView.ptr.dataset.size
+  source.clear()
+  const sizeEnd = thermometerView.ptr.dataset.size
+
+  console.log(thermometerView.ptr.dataset.toString())
+
+  console.log(`dataset size before clearing view related quads ${sizeBefore} and after ${sizeAfter}`)
+  console.log(`dataset size after clearing the initial source ${sizeEnd}`)
 }
 
 main()

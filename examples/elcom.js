@@ -1,4 +1,4 @@
-const { Dimension, LookupSource, Source, View } = require('..')
+const { Source, View } = require('..')
 const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
 
@@ -40,7 +40,7 @@ async function main () {
   const dimensions = tariffsView.dimensions
 
   // let's find the period dimension based on the IRI of the cube dimension
-  const periodDimension = tariffsView.dimension({cubeDimension: ns.energyPricing.period})
+  const periodDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.period })
 
   // the datatype and ranges are available from the cube dimension
   const periodDatatype = periodDimension.cubeDimensions[0].datatype
@@ -52,7 +52,7 @@ async function main () {
   const periodFilter = periodDimension.filter.gte(rdf.literal(periodMean, periodDatatype))
 
   // let's find the municipality dimension based on the IRI of the cube dimension
-  const municipalityDimension = tariffsView.dimension({cubeDimension: ns.energyPricing.municipality})
+  const municipalityDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.municipality })
 
   // the municipality dimension as an option list available in the cube dimension as in property
   const municipalities = municipalityDimension.cubeDimensions[0].in
@@ -64,6 +64,9 @@ async function main () {
 
   // now let's create again a view from a cube, but only with the selected dimensions and built filters
   const customView = new View({ dimensions, filters })
+
+  // the following view would be the same as in the elcom-without-cube example
+  // const customView = new View({ dimensions: [periodDimension, municipalityDimension], filters })
 
   // and finally let's fetch the observations
   const observations = await customView.observations()
