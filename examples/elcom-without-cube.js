@@ -23,7 +23,7 @@ async function main () {
   const cubeSource = CubeSource.fromSource(source, rdf.namedNode('https://energy.ld.admin.ch/elcom/energy-pricing/cube'))
 
   // we start with an empty view
-  const customView = View.fromSource(cubeSource)
+  const customView = new View({ parent: cubeSource })
 
   // now let's create the first dimension
   const periodDimension = customView.createDimension({

@@ -27,7 +27,7 @@ async function main () {
   // now let's create a view from the cube, which is required to get the observations
   const tariffsView = View.fromCube(tariffsCube)
 
-  const customView = View.fromSource(source)
+  const customView = new View({ parent: source })
 
   const providerDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.provider })
   const providerLabelDimension = customView.createDimension({
