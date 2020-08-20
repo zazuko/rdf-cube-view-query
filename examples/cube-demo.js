@@ -26,9 +26,9 @@ async function main () {
   // all available cubes are returned as an array and can be searched based on the metadata
   const thermometerCube = cubes.find(cube => {
     // let's look for a cube that contains the string 'Thermometer' in the german name property
-    return cube.out(ns.schema.name).terms
-      .filter(term => term.language === 'de')
-      .some(term => term.value.includes('Thermometer'))
+    return cube.out(ns.schema.name, { language: 'de' })
+      .values
+      .some(value => value.includes('Thermometer'))
   })
 
   // now let's create a view from the cube, which is required to get the observations
