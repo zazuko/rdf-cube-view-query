@@ -24,9 +24,20 @@ SELECT ?type ?iri ?label {
 
       FILTER regex(?providerLabel, ".*${search}.*")
     }
+  } UNION
+  {
+    SELECT DISTINCT ("municipality" AS ?type) (?municipality AS ?iri) (?municipalityLabel AS ?label)
+    WHERE { GRAPH <https://lindas.admin.ch/elcom/electricityprice> {
+      ?offer a schema:Offer ;
+        schema:areaServed ?municipality;
+        schema:postalCode "${search}" .
+      }
+      { GRAPH <https://lindas.admin.ch/fso/agvch> {
+    	  ?municipality schema:name ?municipalityLabel .
+      }}
+    }
   }
 }
-
 LIMIT ${limit}
 `
 }
@@ -45,7 +56,7 @@ async function main () {
   const client = source.client
 
   // which can be used to run SPARQL queries with a simple interface
-  const results = await client.query.select(searchQuery('Biel'))
+  const results = await client.query.select(searchQuery('Ber*'))
 
   console.log(results)
 }
