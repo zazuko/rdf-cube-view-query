@@ -9,7 +9,8 @@ SELECT ?type ?iri ?label {
   {
     SELECT ("municipality" AS ?type) (?municipality AS ?iri) (?municipalityLabel AS ?label) WHERE {
       GRAPH <https://lindas.admin.ch/fso/agvch> {
-        ?municipality a lac:Municipality .
+        VALUES ?class { lac:Municipality lac:AbolishedMunicipality }
+        ?municipality a ?class .
         ?municipality schema:name ?municipalityLabel.    
       }
 
@@ -56,7 +57,7 @@ async function main () {
   const client = source.client
 
   // which can be used to run SPARQL queries with a simple interface
-  const results = await client.query.select(searchQuery('Ber*'))
+  const results = await client.query.select(searchQuery('Giubia*'))
 
   console.log(results)
 }
