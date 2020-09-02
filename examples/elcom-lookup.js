@@ -4,7 +4,7 @@ const namespace = require('@rdfjs/namespace')
 const ns = {
   dc: namespace('http://purl.org/dc/elements/1.1/'),
   dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  energyPricing: namespace('https://energy.ld.admin.ch/elcom/energy-pricing/dimension/'),
+  energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
   schema: namespace('http://schema.org/'),
   xsd: namespace('http://www.w3.org/2001/XMLSchema#')
@@ -19,7 +19,7 @@ async function main () {
     // password: ''
   })
 
-  const tariffsCube = await source.cube('https://energy.ld.admin.ch/elcom/energy-pricing/cube')
+  const tariffsCube = await source.cube('https://energy.ld.admin.ch/elcom/electricity-price/cube')
 
   // let's create the lookup source based on the existing source
   const lookup = LookupSource.fromSource(source)
@@ -29,17 +29,20 @@ async function main () {
 
   const customView = new View({ parent: source })
 
-  const providerDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.provider })
-  const providerLabelDimension = customView.createDimension({
+  const operatorDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.operator })
+  const operatorLabelDimension = customView.createDimension({
     source: lookup,
     path: ns.schema.name,
-    join: providerDimension,
-    as: ns.energyPricing.providerLabel
+    join: operatorDimension,
+    as: ns.energyPricing.operatorLabel
   })
 
+  const operatorLabelLanguageFilter = operatorLabelDimension.filter.lang(['de', 'en', '*'])
+
   customView
-    .addDimension(providerDimension)
-    .addDimension(providerLabelDimension)
+    .addDimension(operatorDimension)
+    .addDimension(operatorLabelDimension)
+    .addFilter(operatorLabelLanguageFilter)
 
   // and finally let's fetch the observations
   const observations = await customView.observations()
