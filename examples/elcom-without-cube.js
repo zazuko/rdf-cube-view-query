@@ -5,7 +5,7 @@ const namespace = require('@rdfjs/namespace')
 const ns = {
   dc: namespace('http://purl.org/dc/elements/1.1/'),
   dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  energyPricing: namespace('https://energy.ld.admin.ch/elcom/energy-pricing/dimension/'),
+  energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
   rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
   schema: namespace('http://schema.org/'),
   xsd: namespace('http://www.w3.org/2001/XMLSchema#')
@@ -20,7 +20,7 @@ async function main () {
     // password: ''
   })
 
-  const cubeSource = CubeSource.fromSource(source, rdf.namedNode('https://energy.ld.admin.ch/elcom/energy-pricing/cube'))
+  const cubeSource = CubeSource.fromSource(source, rdf.namedNode('https://energy.ld.admin.ch/elcom/electricity-price/cube'))
 
   // we start with an empty view
   const customView = new View({ parent: cubeSource })
@@ -51,8 +51,8 @@ async function main () {
 
   // and again a filter for it
   const municipalityFilter = municipalityDimension.filter.in([
-    rdf.namedNode('http://classifications.data.admin.ch/municipality/3215'),
-    rdf.namedNode('http://classifications.data.admin.ch/municipality/58')
+    rdf.namedNode('https://register.ld.admin.ch/municipality/3215'),
+    rdf.namedNode('https://register.ld.admin.ch/municipality/58')
   ])
 
   // and add it to the view
