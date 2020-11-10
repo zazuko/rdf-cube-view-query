@@ -34,7 +34,7 @@ SELECT ?type ?iri ?label {
         schema:postalCode "${search}" .
       }
       { GRAPH <https://lindas.admin.ch/fso/agvch> {
-    	  ?municipality schema:name ?municipalityLabel .
+        ?municipality schema:name ?municipalityLabel .
       }}
     }
   }
@@ -46,8 +46,7 @@ LIMIT ${limit}
 async function main () {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
-    endpointUrl: 'https://ld.zazuko.com/query',
-  //  endpointUrl: 'https://test.lindas.admin.ch/query',
+    endpointUrl: 'https://test.lindas.admin.ch/query',
     sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice'
     // user: '',
     // password: ''
