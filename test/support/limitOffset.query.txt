@@ -1,0 +1,7 @@
+SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <http://ns.bergnet.org/cube/observationSet> ?observationSet0 .
+  ?observationSet0 <http://ns.bergnet.org/cube/observation> ?source0 .
+  ?source0 <http://schema.org/dateCreated> ?dimension0 .
+  ?source0 <http://schema.org/location> ?dimension1 .
+}
+GROUP BY ?dimension0 ?dimension1 LIMIT 50 OFFSET 100
