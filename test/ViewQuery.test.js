@@ -8,11 +8,15 @@ describe('query/ViewQuery', () => {
     strictEqual(typeof ViewQuery, 'function')
   })
 
-  it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
-    await compareViewQuery({ name: 'orderBy' })
+  it('should generate a language filter', async () => {
+    await compareViewQuery({ name: 'language' })
   })
 
   it('should generate LIMIT and OFFSET with the values given in projection/orderBy', async () => {
     await compareViewQuery({ name: 'limitOffset' })
+  })
+
+  it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
+    await compareViewQuery({ name: 'orderBy' })
   })
 })
