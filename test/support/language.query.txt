@@ -1,0 +1,29 @@
+SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <http://ns.bergnet.org/cube/observationSet> ?observationSet0 .
+  ?observationSet0 <http://ns.bergnet.org/cube/observation> ?source0 .
+  ?source0 <http://schema.org/location> ?dimension0 .
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension2_0 .
+    FILTER (
+      LANGMATCHES(LANG(?dimension2_0), "de")
+    )
+  }
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension2_1 .
+    FILTER (
+      LANGMATCHES(LANG(?dimension2_1), "en")
+    )
+  }
+  OPTIONAL {
+    {
+      SELECT (MIN(?dimension2_2) AS ?dimension2_2) WHERE {
+        ?dimension0 <http://schema.org/name> ?dimension2_2 .
+        FILTER (
+          LANGMATCHES(LANG(?dimension2_2), "*")
+        )
+      }
+    }
+  }
+  BIND(COALESCE(?dimension2_0, ?dimension2_1, ?dimension2_2) AS ?dimension2)
+}
+GROUP BY ?dimension0 ?dimension1
