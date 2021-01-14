@@ -2,12 +2,8 @@ const { LookupSource, Source, View } = require('..')
 const namespace = require('@rdfjs/namespace')
 
 const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
   energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  rdf: namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#'),
-  schema: namespace('http://schema.org/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+  schema: namespace('http://schema.org/')
 }
 
 async function main () {
