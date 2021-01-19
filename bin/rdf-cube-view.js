@@ -102,7 +102,7 @@ program
       const customView = new View({ dimensions, filters })
       const observations = await customView.observations()
 
-      console.log(toCsv(observations))
+      console.log(toCsv(customView, observations))
     }
   })
 
