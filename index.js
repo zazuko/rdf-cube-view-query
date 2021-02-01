@@ -1,3 +1,4 @@
+const Cube = require('./lib/Cube')
 const CubeSource = require('./lib/CubeSource')
 const Dimension = require('./lib/Dimension')
 const Filter = require('./')
@@ -7,6 +8,7 @@ const Source = require('./lib/Source')
 const View = require('./lib/View')
 
 module.exports = {
+  Cube,
   CubeSource,
   Dimension,
   Filter,
