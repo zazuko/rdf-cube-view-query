@@ -1,16 +1,9 @@
 const { strictEqual } = require('assert')
-const { readFile } = require('fs').promises
 const clownface = require('clownface')
 const rdf = require('rdf-ext')
 const fromFile = require('rdf-utils-fs/fromFile')
 const ViewQuery = require('../../lib/query/ViewQuery')
-
-function cleanQuery (query) {
-  return query
-    .replace(/\n/g, ' ')
-    .replace(/ +/g, ' ')
-    .trim()
-}
+const { cleanQuery, queryFromTxt } = require('./utils')
 
 async function viewQueryFromTtl (name) {
   const filename = `test/support/${name}.ttl`
@@ -27,15 +20,8 @@ async function viewQueryFromTtl (name) {
   return cleanQuery(viewQuery.query.toString())
 }
 
-async function viewQueryFromTxt (name) {
-  const filename = `test/support/${name}.query.txt`
-  const content = await readFile(filename)
-
-  return cleanQuery(content.toString())
-}
-
 async function compareViewQuery ({ name }) {
-  strictEqual(await viewQueryFromTtl(name), await viewQueryFromTxt(name))
+  strictEqual(await viewQueryFromTtl(name), await queryFromTxt(name))
 }
 
 module.exports = {
