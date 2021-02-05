@@ -1,6 +1,6 @@
 @base <http://example.org/> .
 
-@prefix view: <http://ns.bergnet.org/cube-view/> .
+@prefix view: <https://cube.link/view/> .
 @prefix schema: <http://schema.org/>.
 
 <view> a view:View;
