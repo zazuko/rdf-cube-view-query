@@ -2,6 +2,7 @@ const { strictEqual } = require('assert')
 const { describe, it } = require('mocha')
 const cubesQuery = require('../lib/query/cubes')
 const Cube = require('../lib/Cube')
+const Source = require('../lib/Source')
 const { compareQuery } = require('./support/compareQuery')
 const ns = require('./support/namespaces')
 
@@ -11,6 +12,21 @@ describe('Cube', () => {
   })
 
   describe('filter', () => {
+    describe('isPartOf', () => {
+      it('should be a function', () => {
+        strictEqual(typeof Cube.filter.isPartOf, 'function')
+      })
+
+      it('should create a patter in filter for schema:hasPart', async () => {
+        const versionHistory = ns.ex.versionHistory
+        const query = cubesQuery({
+          filters: [Cube.filter.isPartOf(versionHistory)]
+        })
+
+        await compareQuery({ name: 'CubeFilterIsPartOf', query })
+      })
+    })
+
     describe('noValidThrough', () => {
       it('should be a function', () => {
         strictEqual(typeof Cube.filter.noValidThrough, 'function')
@@ -45,6 +61,46 @@ describe('Cube', () => {
 
         await compareQuery({ name: 'CubeFilterStatusValues', query })
       })
+    })
+  })
+
+  describe('in', () => {
+    it('should be a method', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const cube = new Cube({ parent: source })
+
+      strictEqual(typeof cube.in, 'function')
+    })
+
+    it('should use clownface to search for triples pointing to the cube', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const cube = new Cube({ parent: source })
+
+      cube.ptr
+        .addIn(ns.ex.predicate, ns.ex.up)
+        .addOut(ns.ex.predicate, ns.ex.down)
+
+      strictEqual(ns.ex.up.equals(cube.in(ns.ex.predicate).term), true)
+    })
+  })
+
+  describe('out', () => {
+    it('should be a method', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const cube = new Cube({ parent: source })
+
+      strictEqual(typeof cube.out, 'function')
+    })
+
+    it('should use clownface to search for triples starting at the cube', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const cube = new Cube({ parent: source })
+
+      cube.ptr
+        .addIn(ns.ex.predicate, ns.ex.up)
+        .addOut(ns.ex.predicate, ns.ex.down)
+
+      strictEqual(ns.ex.down.equals(cube.out(ns.ex.predicate).term), true)
     })
   })
 })

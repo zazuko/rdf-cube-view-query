@@ -1,4 +1,5 @@
 const { Cube, Source } = require('..')
+const rdf = require('rdf-ext')
 const namespace = require('@rdfjs/namespace')
 
 const ns = {
@@ -11,9 +12,10 @@ async function main () {
     endpointUrl: 'https://test.lindas.admin.ch/query'
   })
 
-  // the source can be used to search for cubes and allows server side filtering
+  // the isPartOf filter allows to search only in a specific version history
   const cubes = await source.cubes({
     filters: [
+      Cube.filter.isPartOf(rdf.namedNode('https://environment.ld.admin.ch/foen/bil-p-01')),
       Cube.filter.noValidThrough(),
       Cube.filter.status(ns.adminTerm('creativeWorkStatus/published'))
     ]
@@ -22,9 +24,8 @@ async function main () {
   for (const cube of cubes) {
     const iri = cube.term.value
     const label = cube.out(ns.schema.name, { language: ['en', 'de', '*'] })
-    const versionHistory = cube.in(ns.schema.hasPart).value
 
-    console.log(`${iri}: ${label} (${versionHistory})`)
+    console.log(`${iri}: ${label}`)
   }
 }
 
