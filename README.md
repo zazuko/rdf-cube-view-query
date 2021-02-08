@@ -2,6 +2,47 @@
 
 `rdf-cube-view-query` provides an API and query builder to create and query views based on the [cube view schema](https://github.com/zazuko/rdf-cube-view-schema).
 
+## Usage
+
+### List Cubes
+
+To list all cubes in a given source, just call the `.cubes()` methods on a `Source` which will return an array of `Cube` objects:
+
+```javascript
+const cubes = await source.cubes()
+```
+
+#### Version History
+
+A version history uses `schema:hasPart` to link to all cubes.
+Searching reverse with `.in()` on a `Cube` will return the version history: 
+
+```javascript
+const versionHistory = cube.in(ns.schema.hasPart).term
+```
+
+The `Cube.filter.isPartOf()` filter can be used to find all cubes attached to a specific version history:
+
+```javascript
+const cubes = await source.cubes({
+  filters: [
+    Cube.filter.isPartOf(versionHistory)
+  ]
+})
+```
+
+To search only for the latest cube, the `Cube.filter.noValidThrough()` can be added.
+The `cubes()` method still returns an array, but if there is no error in the data, the length must be 1:
+
+```javascript
+const cubes = await source.cubes({
+  filters: [
+    Cube.filter.isPartOf(versionHistory),
+    Cube.filter.noValidThrough()
+  ]
+})
+```
+
 ## API
 
 The API of this package is built on top of the [rdf cube view schema](https://github.com/zazuko/rdf-cube-view-schema).
