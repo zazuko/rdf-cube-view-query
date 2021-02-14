@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CLI=./bin/rdf-cube-view.js
-ENDPOINT=https://test.lindas.admin.ch/query
+ENDPOINT=https://int.lindas.admin.ch/query
 GRAPH=https://lindas.admin.ch/foen/cube
 
 #
@@ -16,4 +16,4 @@ $CLI cube-dimensions --endpoint=$ENDPOINT --graph=$GRAPH
 #
 
 # list all observations as csv of the cube filtered by name
-$CLI cube-observations --endpoint=$ENDPOINT --graph=$GRAPH --cube-name="UBD28 Annual Means" 
+#$CLI cube-observations --endpoint=$ENDPOINT --graph=$GRAPH --cube-name="UBD28 Annual Means" 
