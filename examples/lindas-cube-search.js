@@ -8,14 +8,14 @@ const ns = {
 
 async function main () {
   const source = new Source({
-    endpointUrl: 'https://test.lindas.admin.ch/query'
+    endpointUrl: 'https://int.lindas.admin.ch/query'
   })
 
   // the source can be used to search for cubes and allows server side filtering
   const cubes = await source.cubes({
     filters: [
       Cube.filter.noValidThrough(),
-      Cube.filter.status(ns.adminTerm('creativeWorkStatus/published'))
+      Cube.filter.status(ns.adminTerm('CreativeWorkStatus/Draft'))
     ]
   })
 

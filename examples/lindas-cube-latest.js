@@ -9,15 +9,15 @@ const ns = {
 
 async function main () {
   const source = new Source({
-    endpointUrl: 'https://test.lindas.admin.ch/query'
+    endpointUrl: 'https://int.lindas.admin.ch/query'
   })
 
   // the isPartOf filter allows to search only in a specific version history
   const cubes = await source.cubes({
     filters: [
-      Cube.filter.isPartOf(rdf.namedNode('https://environment.ld.admin.ch/foen/bil-p-01')),
+      Cube.filter.isPartOf(rdf.namedNode('https://environment.ld.admin.ch/foen/udb28-annualmean-2')),
       Cube.filter.noValidThrough(),
-      Cube.filter.status(ns.adminTerm('creativeWorkStatus/published'))
+      Cube.filter.status(ns.adminTerm('CreativeWorkStatus/Draft'))
     ]
   })
 

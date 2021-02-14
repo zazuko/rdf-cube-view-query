@@ -16,4 +16,4 @@ $CLI cube-dimensions --endpoint=$ENDPOINT --graph=$GRAPH
 #
 
 # list all observations as csv of the cube filtered by name
-#$CLI cube-observations --endpoint=$ENDPOINT --graph=$GRAPH --cube-name="UBD28 Annual Means" 
+$CLI cube-observations --endpoint=$ENDPOINT --graph=$GRAPH --cube-name="UBD28 Annual Means" 
