@@ -8,6 +8,18 @@ describe('query/ViewQuery', () => {
     strictEqual(typeof ViewQuery, 'function')
   })
 
+  it('should generate a day function filter', async () => {
+    await compareViewQuery({ name: 'functionDay' })
+  })
+
+  it('should generate a month function filter', async () => {
+    await compareViewQuery({ name: 'functionMonth' })
+  })
+
+  it('should generate a year function filter', async () => {
+    await compareViewQuery({ name: 'functionYear' })
+  })
+
   it('should generate a language filter', async () => {
     await compareViewQuery({ name: 'language' })
   })
