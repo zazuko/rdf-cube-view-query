@@ -3,12 +3,37 @@ const { describe, it } = require('mocha')
 const cubesQuery = require('../lib/query/cubes')
 const Cube = require('../lib/Cube')
 const Source = require('../lib/Source')
+const buildCube = require('./support/buildCube')
 const { compareQuery } = require('./support/compareQuery')
 const ns = require('./support/namespaces')
 
 describe('Cube', () => {
   it('should be a constructor', () => {
     strictEqual(typeof Cube, 'function')
+  })
+
+  describe('dimensions', () => {
+    it('should be an array property', () => {
+      const cube = buildCube()
+
+      strictEqual(Array.isArray(cube.dimensions), true)
+    })
+
+    it('should contain all dimensions of the cube without rdf:type', () => {
+      const cube = buildCube({
+        dimensions: [{
+          term: ns.ex.propertyA
+        }, {
+          term: ns.ex.propertyB
+        }]
+      })
+
+      const dimensions = cube.dimensions
+
+      strictEqual(dimensions.length, 2)
+      strictEqual(dimensions[0].path.equals(ns.ex.propertyA), true)
+      strictEqual(dimensions[1].path.equals(ns.ex.propertyB), true)
+    })
   })
 
   describe('filter', () => {
