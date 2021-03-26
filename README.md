@@ -65,6 +65,9 @@ Supported constructor arguments:
 - `user`: User for the SPARQL endpoint as string.
 - `password`: Password for the SPARQL endpoint as string.
 - `sourceGraph`: Named Graph as string, RDF/JS `NamedNode` or Clownface object.
+- `queryOperation`: Type of operation that will be used to make query request to the endpoint.
+  See the [sparql-http-client documentation](https://zazuko.github.io/sparql-http-client/#/?id=operation) for more details.
+  (default: `get` defined in `sparql-http-client`)
 
 #### CubeSource
 

@@ -27,6 +27,7 @@
     "sparql-http-client": "^2.2.2"
   },
   "devDependencies": {
+    "express-as-promise": "^1.2.0",
     "mocha": "^8.2.1",
     "rdf-utils-fs": "^2.1.0",
     "standard": "^14.3.4"
