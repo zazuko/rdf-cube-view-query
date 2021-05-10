@@ -1,6 +1,7 @@
 const { strictEqual } = require('assert')
 const withServer = require('express-as-promise/withServer')
 const { describe, it } = require('mocha')
+const rdf = require('rdf-ext')
 const Source = require('../lib/Source')
 const View = require('../lib/View')
 const ns = require('./support/namespaces')
@@ -8,6 +9,106 @@ const ns = require('./support/namespaces')
 describe('View', () => {
   it('should be a constructor', () => {
     strictEqual(typeof View, 'function')
+  })
+
+  describe('.offset', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.offset, 'function')
+    })
+
+    it('should set the offset value', () => {
+      const view = new View()
+
+      view.offset(123)
+
+      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.offset).term), true)
+    })
+
+    it('should clear the offset value if null is given', () => {
+      const view = new View()
+      view.ptr.addOut(ns.view.offset, rdf.literal('123', ns.xsd.integer))
+
+      view.offset(null)
+
+      strictEqual(view.ptr.out(ns.view.offset).terms.length === 0, true)
+    })
+
+    it('should return the view if an argument is given', () => {
+      const view = new View()
+
+      const result = view.offset(123)
+
+      strictEqual(result, view)
+    })
+
+    it('should return the offset value if no argument is given', () => {
+      const view = new View()
+      view.ptr.addOut(ns.view.offset, rdf.literal('123', ns.xsd.integer))
+
+      const result = view.offset()
+
+      strictEqual(result, 123)
+    })
+
+    it('should return null if no argument is given and there is no offset value', () => {
+      const view = new View()
+
+      const result = view.offset()
+
+      strictEqual(result, null)
+    })
+  })
+
+  describe('.limit', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.limit, 'function')
+    })
+
+    it('should set the limit value', () => {
+      const view = new View()
+
+      view.limit(123)
+
+      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.limit).term), true)
+    })
+
+    it('should clear the limit value if null is given', () => {
+      const view = new View()
+      view.ptr.addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
+
+      view.limit(null)
+
+      strictEqual(view.ptr.out(ns.view.limit).terms.length === 0, true)
+    })
+
+    it('should return the view if an argument is given', () => {
+      const view = new View()
+
+      const result = view.limit(123)
+
+      strictEqual(result, view)
+    })
+
+    it('should return the limit value if no argument is given', () => {
+      const view = new View()
+      view.ptr.addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
+
+      const result = view.limit()
+
+      strictEqual(result, 123)
+    })
+
+    it('should return null if no argument is given and there is no offset value', () => {
+      const view = new View()
+
+      const result = view.limit()
+
+      strictEqual(result, null)
+    })
   })
 
   describe('observations', () => {
