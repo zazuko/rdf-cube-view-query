@@ -22,9 +22,9 @@ describe('Cube', () => {
     it('should contain all dimensions of the cube without rdf:type', () => {
       const cube = buildCube({
         dimensions: [{
-          term: ns.ex.propertyA
+          path: ns.ex.propertyA
         }, {
-          term: ns.ex.propertyB
+          path: ns.ex.propertyB
         }]
       })
 

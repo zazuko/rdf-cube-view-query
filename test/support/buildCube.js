@@ -1,5 +1,6 @@
 const Cube = require('../../lib/Cube')
 const Source = require('../../lib/Source')
+const buildCubeDimension = require('./buildCubeDimension')
 const ns = require('./namespaces')
 
 function buildCube ({ dimensions = [] } = {}) {
@@ -17,8 +18,7 @@ function buildCube ({ dimensions = [] } = {}) {
 
       for (const dimension of dimensions) {
         shape.addOut(ns.sh.property, property => {
-          property
-            .addOut(ns.sh.path, dimension.term)
+          buildCubeDimension({ shape: property, ...dimension })
         })
       }
     })
