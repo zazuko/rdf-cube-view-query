@@ -1,5 +1,8 @@
 const { strictEqual } = require('assert')
+const rdfHandler = require('@rdfjs/express-handler')
+const withServer = require('express-as-promise/withServer')
 const { describe, it } = require('mocha')
+const rdf = require('rdf-ext')
 const cubesQuery = require('../lib/query/cubes')
 const Cube = require('../lib/Cube')
 const Source = require('../lib/Source')
@@ -33,6 +36,128 @@ describe('Cube', () => {
       strictEqual(dimensions.length, 2)
       strictEqual(dimensions[0].path.equals(ns.ex.propertyA), true)
       strictEqual(dimensions[1].path.equals(ns.ex.propertyB), true)
+    })
+  })
+
+  describe('fetchCube', () => {
+    it('should be a method', () => {
+      const cube = buildCube()
+
+      strictEqual(typeof cube.fetchCube, 'function')
+    })
+
+    it('should use a DESCRIBE query to fetch the cube data', async () => {
+      await withServer(async server => {
+        let query = null
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          query = req.query.query
+
+          res.dataset(rdf.dataset())
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchCube()
+
+        strictEqual(typeof query, 'string')
+        strictEqual(query.includes('DESCRIBE'), true)
+      })
+    })
+
+    it('should add the data from the endpoint to the dataset', async () => {
+      await withServer(async server => {
+        const quad = rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object)
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          res.dataset(rdf.dataset([quad]))
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchCube()
+
+        strictEqual(cube.ptr.dataset.size, 10)
+        strictEqual(cube.ptr.dataset.has(quad), true)
+      })
+    })
+
+    it('should add the data from the endpoint to the cleanup list', async () => {
+      await withServer(async server => {
+        const quad = rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object)
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          res.dataset(rdf.dataset([quad]))
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchCube()
+
+        strictEqual(cube.quads.length, 1)
+        strictEqual(cube.quads.some(q => quad.equals(q)), true)
+      })
+    })
+  })
+
+  describe('fetchShape', () => {
+    it('should be a method', () => {
+      const cube = buildCube()
+
+      strictEqual(typeof cube.fetchShape, 'function')
+    })
+
+    it('should use a DESCRIBE query to fetch the shape data', async () => {
+      await withServer(async server => {
+        let query = null
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          query = req.query.query
+
+          res.dataset(rdf.dataset())
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchShape()
+
+        strictEqual(typeof query, 'string')
+        strictEqual(query.includes('DESCRIBE'), true)
+      })
+    })
+
+    it('should add the data from the endpoint to the dataset', async () => {
+      await withServer(async server => {
+        const quad = rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object)
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          res.dataset(rdf.dataset([quad]))
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchShape()
+
+        strictEqual(cube.ptr.dataset.size, 10)
+        strictEqual(cube.ptr.dataset.has(quad), true)
+      })
+    })
+
+    it('should add the data from the endpoint to the cleanup list', async () => {
+      await withServer(async server => {
+        const quad = rdf.quad(ns.ex.subject, ns.ex.predicate, ns.ex.object)
+
+        server.app.get('/', rdfHandler(), (req, res) => {
+          res.dataset(rdf.dataset([quad]))
+        })
+
+        const cube = buildCube({ endpointUrl: await server.listen() })
+
+        await cube.fetchShape()
+
+        strictEqual(cube.quads.length, 1)
+        strictEqual(cube.quads.some(q => quad.equals(q)), true)
+      })
     })
   })
 
