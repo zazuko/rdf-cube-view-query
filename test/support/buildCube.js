@@ -3,9 +3,9 @@ const Source = require('../../lib/Source')
 const buildCubeDimension = require('./buildCubeDimension')
 const ns = require('./namespaces')
 
-function buildCube ({ dimensions = [] } = {}) {
-  const source = new Source({ endpointUrl: ns.ex.endpoint })
-  const cube = new Cube({ parent: source })
+function buildCube ({ endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
+  const source = new Source({ endpointUrl })
+  const cube = new Cube({ parent: source, source })
 
   cube.ptr
     .addOut(ns.rdf.type, ns.cube.Cube)
