@@ -24,6 +24,10 @@ describe('query/ViewQuery', () => {
     await compareViewQuery({ name: 'language' })
   })
 
+  it('should generate a language filter with aggregate', async () => {
+    await compareViewQuery({ name: 'languageMin' })
+  })
+
   it('should generate LIMIT and OFFSET with the values given in projection/orderBy', async () => {
     await compareViewQuery({ name: 'limitOffset' })
   })
