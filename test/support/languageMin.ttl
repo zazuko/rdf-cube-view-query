@@ -28,7 +28,8 @@
     view:join <dimension/room>;
     view:path schema:name
   ];
-  view:as schema:name.
+  view:as schema:name;
+  view:aggregate view:Min.
 
 <filter/roomLabelLanguage> a view:Filter;
   view:dimension <dimension/roomLabel>;
