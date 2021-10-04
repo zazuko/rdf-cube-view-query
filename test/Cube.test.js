@@ -177,12 +177,26 @@ describe('Cube', () => {
       })
     })
 
+    describe('noExpires', () => {
+      it('should be a function', () => {
+        strictEqual(typeof Cube.filter.noExpires, 'function')
+      })
+
+      it('should create a not exists filter for schema:expires', async () => {
+        const query = cubesQuery({
+          filters: [Cube.filter.noExpires()]
+        })
+
+        await compareQuery({ name: 'CubeFilterNoExpires', query })
+      })
+    })
+
     describe('noValidThrough', () => {
       it('should be a function', () => {
         strictEqual(typeof Cube.filter.noValidThrough, 'function')
       })
 
-      it('should create a not exists filter for schema:noValidThrough', async () => {
+      it('should create a not exists filter for schema:validThrough', async () => {
         const query = cubesQuery({
           filters: [Cube.filter.noValidThrough()]
         })
