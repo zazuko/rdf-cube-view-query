@@ -1,6 +1,7 @@
 const { strictEqual } = require('assert')
 const rdfHandler = require('@rdfjs/express-handler')
 const withServer = require('express-as-promise/withServer')
+const upperFirst = require('lodash/upperFirst')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
 const cubesQuery = require('../lib/query/cubes')
@@ -225,6 +226,38 @@ describe('Cube', () => {
 
         await compareQuery({ name: 'CubeFilterStatusValues', query })
       })
+    })
+
+    describe('version', () => {
+      it('should be a function', () => {
+        strictEqual(typeof Cube.filter.version, 'function')
+      })
+
+      it('should create an eq filter for the given version', async () => {
+        const query = cubesQuery({
+          filters: [Cube.filter.version('2')]
+        })
+
+        await compareQuery({ name: 'CubeFilterVersionEq', query })
+      })
+
+      const operations = ['eq', 'ne', 'lt', 'gt', 'lte', 'gte']
+
+      for (const operation of operations) {
+        describe(operation, () => {
+          it('should be a function', () => {
+            strictEqual(typeof Cube.filter.version[operation], 'function')
+          })
+
+          it(`should create an ${operation} filter for the given version`, async () => {
+            const query = cubesQuery({
+              filters: [Cube.filter.version[operation]('2')]
+            })
+
+            await compareQuery({ name: `CubeFilterVersion${upperFirst(operation)}`, query })
+          })
+        })
+      }
     })
   })
 
