@@ -120,4 +120,20 @@ describe('Source', () => {
       })
     })
   })
+
+  describe('.cubesQuery', () => {
+    it('should be a method', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+
+      strictEqual(typeof source.cubesQuery, 'function')
+    })
+
+    it('should return a select query', () => {
+      const source = new Source({ endpointUrl: ns.ex.endpoint })
+
+      const result = source.cubesQuery()
+
+      strictEqual(result.toString().includes('SELECT'), true)
+    })
+  })
 })
