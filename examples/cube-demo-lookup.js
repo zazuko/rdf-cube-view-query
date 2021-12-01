@@ -18,7 +18,7 @@ async function main () {
   })
 
   // let's create a cube and lookup source based on the existing source
-  const cubeSource = CubeSource.fromSource(source, rdf.namedNode('http://localhost:8080/rdf-cube-schema-example/temperature-sensor/cube'))
+  const cubeSource = CubeSource.fromSource(source, rdf.namedNode('http://example.org/rdf-cube-schema-example/temperature-sensor/cube'))
   const lookupSource = LookupSource.fromSource(source)
 
   // we start with an empty view
