@@ -35,4 +35,8 @@ describe('query/ViewQuery', () => {
   it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
     await compareViewQuery({ name: 'orderBy' })
   })
+
+  it('should generate a Stardog text search filter', async () => {
+    await compareViewQuery({ name: 'stardogTextSearch' })
+  })
 })
