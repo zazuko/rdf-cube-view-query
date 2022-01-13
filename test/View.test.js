@@ -23,7 +23,7 @@ describe('View', () => {
 
       view.offset(123)
 
-      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.offset).term), true)
+      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.projection).out(ns.view.offset).term), true)
     })
 
     it('should clear the offset value if null is given', () => {
@@ -32,7 +32,7 @@ describe('View', () => {
 
       view.offset(null)
 
-      strictEqual(view.ptr.out(ns.view.offset).terms.length === 0, true)
+      strictEqual(view.ptr.out(ns.view.projection).out(ns.view.offset).terms.length === 0, true)
     })
 
     it('should return the view if an argument is given', () => {
@@ -45,7 +45,7 @@ describe('View', () => {
 
     it('should return the offset value if no argument is given', () => {
       const view = new View()
-      view.ptr.addOut(ns.view.offset, rdf.literal('123', ns.xsd.integer))
+      view.ptr.out(ns.view.projection).addOut(ns.view.offset, rdf.literal('123', ns.xsd.integer))
 
       const result = view.offset()
 
@@ -73,16 +73,16 @@ describe('View', () => {
 
       view.limit(123)
 
-      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.limit).term), true)
+      strictEqual(rdf.literal('123', ns.xsd.integer).equals(view.ptr.out(ns.view.projection).out(ns.view.limit).term), true)
     })
 
     it('should clear the limit value if null is given', () => {
       const view = new View()
-      view.ptr.addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
+      view.ptr.out(ns.view.projection).addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
 
       view.limit(null)
 
-      strictEqual(view.ptr.out(ns.view.limit).terms.length === 0, true)
+      strictEqual(view.ptr.out(ns.view.projection).out(ns.view.limit).terms.length === 0, true)
     })
 
     it('should return the view if an argument is given', () => {
@@ -95,7 +95,7 @@ describe('View', () => {
 
     it('should return the limit value if no argument is given', () => {
       const view = new View()
-      view.ptr.addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
+      view.ptr.out(ns.view.projection).addOut(ns.view.limit, rdf.literal('123', ns.xsd.integer))
 
       const result = view.limit()
 
@@ -155,6 +155,97 @@ describe('View', () => {
         await view.observations()
 
         strictEqual(called, true)
+      })
+    })
+  })
+
+  describe('observationCount', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.observationCount, 'function')
+    })
+
+    it('should use a GET query request', async () => {
+      await withServer(async server => {
+        let called = false
+
+        server.app.get('/', (req, res) => {
+          called = true
+
+          res.status(200).set('content-type', 'application/sparql-results+json').json({
+            head: {
+              vars: ['count']
+            },
+            results: {
+              bindings: [{
+                count: { type: 'literal', value: '5' }
+              }]
+            }
+          })
+        })
+
+        const source = new Source({ endpointUrl: await server.listen() })
+        const view = new View({ parent: source })
+        view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
+
+        await view.observationCount()
+
+        strictEqual(called, true)
+      })
+    })
+
+    it('should use the defined operation for the query request', async () => {
+      await withServer(async server => {
+        let called = false
+
+        server.app.post('/', (req, res) => {
+          called = true
+
+          res.status(200).set('content-type', 'application/sparql-results+json').json({
+            head: {
+              vars: ['count']
+            },
+            results: {
+              bindings: [{
+                count: { type: 'literal', value: '5' }
+              }]
+            }
+          })
+        })
+
+        const source = new Source({ endpointUrl: await server.listen(), queryOperation: 'postDirect' })
+        const view = new View({ parent: source })
+        view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
+
+        await view.observationCount()
+
+        strictEqual(called, true)
+      })
+    })
+
+    it('should return the number of observations', async () => {
+      await withServer(async server => {
+        server.app.post('/', (req, res) => {
+          res.status(200).set('content-type', 'application/sparql-results+json').json({
+            head: {
+              vars: ['count']
+            },
+            results: {
+              bindings: [{
+                count: { type: 'literal', value: '5' }
+              }]
+            }
+          })
+        })
+
+        const source = new Source({ endpointUrl: await server.listen(), queryOperation: 'postDirect' })
+        const view = new View({ parent: source })
+        view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
+
+        const count = await view.observationCount()
+
+        strictEqual(count, 5)
       })
     })
   })
