@@ -57,10 +57,14 @@ async function main () {
     .addDimension(roomLabelDimension)
     .addDimension(roomDimension)
     .addFilter(roomLabelLanguageFilter)
+    .limit(5)
 
   // and finally let's fetch the observations
   const observations = await customView.observations()
-  console.log(`found ${observations.length} observations`)
+  console.log(`found ${observations.length} observations (using limit 5)`)
+
+  const count = await customView.observationCount()
+  console.log(`found ${count} observations (using .observationCount())`)
 
   // maybe we also want to know how the query looks
   console.log(customView.observationsQuery().query.toString())

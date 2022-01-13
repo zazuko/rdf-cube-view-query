@@ -1,7 +1,7 @@
 const { strictEqual } = require('assert')
 const { describe, it } = require('mocha')
 const ViewQuery = require('../lib/query/ViewQuery')
-const { compareViewQuery } = require('./support/compareViewQuery')
+const { compareViewCountQuery, compareViewQuery } = require('./support/compareViewQuery')
 
 describe('query/ViewQuery', () => {
   it('should be a constructor', () => {
@@ -34,6 +34,10 @@ describe('query/ViewQuery', () => {
 
   it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
     await compareViewQuery({ name: 'orderBy' })
+  })
+
+  it('should generate a count query', async () => {
+    await compareViewCountQuery({ name: 'simple' })
   })
 
   it('should generate a Stardog text search filter', async () => {
