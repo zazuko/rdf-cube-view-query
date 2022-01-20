@@ -8,6 +8,10 @@ describe('query/ViewQuery', () => {
     strictEqual(typeof ViewQuery, 'function')
   })
 
+  it('should generate a query without distinct if disableDistinct is true', async () => {
+    await compareViewQuery({ disableDistinct: true, name: 'disableDistinct' })
+  })
+
   it('should generate a day function filter', async () => {
     await compareViewQuery({ name: 'functionDay' })
   })
