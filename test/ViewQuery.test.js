@@ -44,6 +44,10 @@ describe('query/ViewQuery', () => {
     await compareViewCountQuery({ name: 'simple' })
   })
 
+  it('should generate a count query without LIMIT and OFFSET', async () => {
+    await compareViewCountQuery({ name: 'limitOffset' })
+  })
+
   it('should generate a Stardog text search filter', async () => {
     await compareViewQuery({ name: 'stardogTextSearch' })
   })
