@@ -11,14 +11,23 @@ async function main () {
   const view = View.fromDataset({ dataset, term, source })
 
   const observations = await view.observations()
-  console.log('observations.length', observations.length)
+  console.log('view.observations().length', observations.length)
 
   const count = await view.observationCount()
   console.log('count', count)
+
+  await view.fetchCubeShape()
+
+  for (const dimension of view.dimensions) {
+    const cubeDimension = dimension.cubeDimensions[0]
+    console.log(cubeDimension.constructor.name)
+  }
 }
 
 function getSampleData () {
-  const viewTTL = `<https://example.org/view> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/View> .
+  const viewTTL = `
+
+<https://example.org/view> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/View> .
 <https://example.org/view> <https://cube.link/view/dimension> _:b37 .
 <https://example.org/view> <https://cube.link/view/dimension> _:b39 .
 <https://example.org/view> <https://cube.link/view/dimension> _:b41 .
@@ -27,6 +36,7 @@ function getSampleData () {
 <https://example.org/view> <https://cube.link/view/dimension> _:b47 .
 <https://example.org/view> <https://cube.link/view/dimension> _:b49 .
 <https://example.org/view> <https://cube.link/view/projection> _:b36 .
+
 _:b37 <https://cube.link/view/from> _:b38 .
 _:b37 <https://cube.link/view/as> <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> .
 _:b39 <https://cube.link/view/from> _:b40 .
@@ -48,6 +58,9 @@ _:b38 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/prop
 _:b34 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/CubeSource> .
 _:b34 <https://cube.link/view/endpoint> <https://lindas.admin.ch/query> .
 _:b34 <https://cube.link/view/cube> <https://ld.stadt-zuerich.ch/statistics/BEW-SEX> .
+
+<https://ld.stadt-zuerich.ch/statistics/BEW-SEX> <https://cube.link/observationConstraint> <https://ld.stadt-zuerich.ch/statistics/BEW-SEX/shape/> .
+
 _:b40 <https://cube.link/view/source> _:b34 .
 _:b40 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/property/TIME> .
 _:b42 <https://cube.link/view/source> _:b34 .
@@ -58,6 +71,9 @@ _:b46 <https://cube.link/view/source> _:b34 .
 _:b46 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/measure/BEW> .
 _:b48 <https://cube.link/view/source> _:b34 .
 _:b48 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/attribute/KORREKTUR> .
+
+<https://ld.stadt-zuerich.ch/statistics/attribute/KORREKTUR> <http://label> "KORREKTUR" .
+
 _:b50 <https://cube.link/view/source> _:b34 .
 _:b50 <https://cube.link/view/path> <https://cube.link/observedBy> .
 `

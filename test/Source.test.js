@@ -179,7 +179,7 @@ describe('Source', () => {
         strictEqual(result.length, 2)
         strictEqual(result[0] instanceof View, true)
         strictEqual(result[1] instanceof View, true)
-        strictEqual(called, 5)
+        strictEqual(called, 3)
       })
     })
 
