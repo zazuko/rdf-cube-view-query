@@ -12,6 +12,9 @@ async function main () {
 
   const observations = await view.observations()
   console.log('observations.length', observations.length)
+
+  const count = await view.observationCount()
+  console.log('count', count)
 }
 
 function getSampleData () {
