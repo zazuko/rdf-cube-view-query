@@ -1,14 +1,12 @@
-const { Source, View } = require('..')
 const { Parser } = require('n3')
 const rdf = require('rdf-ext')
+const { ViewBuilder } = require('../lib/viewUtils.js')
 
 async function main () {
-  const source = new Source({
-    endpointUrl: 'https://int.lindas.admin.ch/query'
-  })
-
   const { dataset, term } = getSampleData()
-  const view = View.fromDataset({ dataset, term, source })
+  const { view, source } = ViewBuilder.fromDataset({ dataset, term })
+
+  console.log('source.endpoint', source.endpoint)
 
   const observations = await view.observations()
   console.log('view.observations().length', observations.length)
