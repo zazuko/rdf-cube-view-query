@@ -10,8 +10,7 @@ async function main () {
   const view = View.fromCube(cube)
 
   const observations = await view.observations()
-
-  console.log('observations.length', observations.length)
+  console.log('view.observations().length', observations.length)
 }
 
 main()
