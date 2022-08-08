@@ -4,7 +4,6 @@ async function main () {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'https://int.lindas.admin.ch/query',
-    // endpointUrl: 'https://ld.zazuko.com/query',
     queryOperation: 'postDirect'
   })
 

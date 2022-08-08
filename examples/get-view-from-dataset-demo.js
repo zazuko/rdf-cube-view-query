@@ -14,6 +14,7 @@ async function main () {
   const count = await view.observationCount()
   console.log('count', count)
 
+  // Constraints that apply to each dimension
   await view.fetchCubeShape()
 
   for (const dimension of view.dimensions) {
