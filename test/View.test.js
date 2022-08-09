@@ -111,6 +111,121 @@ describe('View', () => {
     })
   })
 
+  describe('.orderBy', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.orderBy, 'function')
+    })
+
+    it('should set the orderBy value', () => {
+      const view = new View()
+
+      view.orderBy([{ dimension: ns.ex.dimension, direction: ns.ex.direction }, { dimension: ns.ex.dimension2, direction: ns.ex.direction2 }])
+
+      strictEqual(view.ptr.out(ns.view.projection).out(ns.view.orderBy).isList(), true)
+      strictEqual([...view.ptr.out(ns.view.projection).out(ns.view.orderBy).list()].length, 2)
+
+      const first = [...view.ptr.out(ns.view.projection).out(ns.view.orderBy).list()][0]
+      const second = [...view.ptr.out(ns.view.projection).out(ns.view.orderBy).list()][1]
+
+      strictEqual(first.out(ns.view.dimension).term.equals(ns.ex.dimension), true)
+      strictEqual(first.out(ns.view.direction).term.equals(ns.ex.direction), true)
+      strictEqual(second.out(ns.view.dimension).term.equals(ns.ex.dimension2), true)
+      strictEqual(second.out(ns.view.direction).term.equals(ns.ex.direction2), true)
+    })
+
+    it('should clear the orderBy value if null is given', () => {
+      const view = new View()
+
+      view.ptr.out(ns.view.projection).addList(ns.view.orderBy, [ns.ex.value])
+
+      view.dataset.add(rdf.quad(ns.ex.value, ns.view.direction, ns.ex.value1))
+      view.dataset.add(rdf.quad(ns.ex.value, ns.view.dimension, ns.ex.value2))
+
+      strictEqual(view.ptr.node(ns.ex.value).out().terms.length, 2)
+
+      view.orderBy(null)
+
+      strictEqual(view.ptr.out(ns.view.projection).out(ns.view.orderBy).terms.length === 0, true)
+      strictEqual(view.ptr.node(ns.ex.value).out().terms.length, 0)
+    })
+
+    it('should return the view if an argument is given', () => {
+      const view = new View()
+
+      const result = view.orderBy([{ dimension: ns.ex.dimension, direction: ns.ex.direction }])
+
+      strictEqual(result, view)
+    })
+
+    it('should return the orderBy value if no argument is given', () => {
+      const view = new View()
+
+      view.ptr.out(ns.view.projection).addList(ns.view.orderBy, [ns.ex.value])
+
+      view.dataset.add(rdf.quad(ns.ex.value, ns.view.direction, ns.ex.value1))
+      view.dataset.add(rdf.quad(ns.ex.value, ns.view.dimension, ns.ex.value2))
+
+      const result = view.orderBy()
+
+      strictEqual(result.length, 1)
+      strictEqual(result[0].direction.equals(ns.ex.value1), true)
+      strictEqual(result[0].dimension.equals(ns.ex.value2), true)
+    })
+
+    it('should return null if no argument is given and there is no orderBy value', () => {
+      const view = new View()
+
+      const result = view.orderBy()
+
+      strictEqual(result, null)
+    })
+  })
+
+  describe('.updateProjection', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.updateProjection, 'function')
+    })
+
+    it('should add offset, limit and orderby', () => {
+      const view = new View()
+
+      view.updateProjection({ offset: 1, limit: 2, orderBy: [{ direction: ns.ex.direction, dimension: ns.ex.dimension }] })
+
+      strictEqual(view.offset(), 1)
+      strictEqual(view.limit(), 2)
+      strictEqual(view.orderBy().length, 1)
+    })
+
+    it('should clear the values if null is given', () => {
+      const view = new View()
+
+      view.updateProjection({ offset: 1, limit: 2, orderBy: [{ direction: ns.ex.direction, dimension: ns.ex.dimension }] })
+
+      view.updateProjection({ offset: null, limit: null, orderBy: null })
+      strictEqual(view.offset(), null)
+      strictEqual(view.limit(), null)
+      strictEqual(view.orderBy(), null)
+    })
+
+    it('should update previous values', () => {
+      const view = new View()
+
+      view.updateProjection({ offset: 1, limit: 2, orderBy: [{ direction: ns.ex.direction, dimension: ns.ex.dimension }] })
+
+      view.updateProjection({ offset: 3, limit: 4, orderBy: [{ direction: ns.ex.direction2, dimension: ns.ex.dimension2 }] })
+
+      strictEqual(view.offset(), 3)
+      strictEqual(view.limit(), 4)
+      strictEqual(view.orderBy().length, 1)
+      strictEqual(ns.ex.direction2.equals(view.orderBy()[0].direction), true)
+      strictEqual(ns.ex.dimension2.equals(view.orderBy()[0].dimension), true)
+    })
+  })
+
   describe('observations', () => {
     it('should be a method', () => {
       const view = new View()
