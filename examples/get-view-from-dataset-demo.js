@@ -4,9 +4,9 @@ const { ViewBuilder } = require('../lib/viewUtils.js')
 
 async function main () {
   const { dataset, term } = getSampleData()
-  const { view, source } = ViewBuilder.fromDataset({ dataset, term })
+  const { view } = ViewBuilder.fromDataset({ dataset, term })
 
-  console.log('source.endpoint', source.endpoint)
+  console.log('sources', view.sources().map(s => s.endpoint))
 
   const observations = await view.observations()
   console.log('view.observations().length', observations.length)
@@ -17,9 +17,11 @@ async function main () {
   // Constraints that apply to each dimension
   await view.fetchCubeShape()
 
+  console.log('cubes', view.cubes())
+
   for (const dimension of view.dimensions) {
     const cubeDimension = dimension.cubeDimensions[0]
-    console.log(cubeDimension.constructor.name)
+    console.log(cubeDimension.path.value, 'from cube', cubeDimension.cube.value)
   }
 }
 

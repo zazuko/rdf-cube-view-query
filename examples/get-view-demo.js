@@ -20,7 +20,9 @@ async function main () {
   for (const dimension of view.dimensions) {
     const cubeDimension = dimension.cubeDimensions[0]
     // Some cube dimensions are undefined?
-    console.log(dimension.term, cubeDimension?.constructor?.name)
+    if (cubeDimension) {
+      console.log(cubeDimension.path, cubeDimension.cube)
+    }
   }
 }
 
