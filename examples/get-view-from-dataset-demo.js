@@ -9,24 +9,23 @@ async function main () {
   console.log('---------')
   console.log('All sources', view.sources().map(x => x.endpoint))
 
+  console.log('---------')
+  console.log('All cubes', view.cubes().map(x => x.value))
+
   const observations = await view.observations()
   console.log('---------')
-  console.log('view.observations().length', observations.length)
+  console.log('observations length', observations.length)
 
   const count = await view.observationCount()
   console.log('---------')
-  console.log('count', count)
+  console.log('observations count', count)
 
-  console.log('---------')
-  console.log('All cubes', view.cubes())
-
-  // Constraints that apply to each dimension
   await view.fetchCubesShapes()
 
   console.log('---------')
   for (const dimension of view.dimensions) {
     const cubeDimension = dimension.cubeDimensions[0]
-    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes)
+    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes.map(x => x.value))
   }
 }
 

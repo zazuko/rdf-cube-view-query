@@ -9,23 +9,23 @@ async function main () {
   const view = View.fromCube(cube)
 
   console.log('---------')
-  console.log('All cubes', view.cubes())
+  console.log('All sources', view.sources().map(x => x.endpoint))
 
   console.log('---------')
-  console.log('All sources', view.sources().map(x => x.endpoint))
+  console.log('All cubes', view.cubes().map(x => x.value))
 
   const observations = await view.observations()
   console.log('---------')
-  console.log('view.observations().length', observations.length)
+  console.log('observations length', observations.length)
 
   const count = await view.observationCount()
   console.log('---------')
-  console.log('count', count)
+  console.log('observations count', count)
 
   console.log('---------')
   for (const dimension of view.dimensions) {
     const cubeDimension = dimension.cubeDimensions[0]
-    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes)
+    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes.map(x => x.value))
   }
 }
 
