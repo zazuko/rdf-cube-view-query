@@ -9,21 +9,15 @@ async function main () {
   const view = await source.view(rdf.namedNode('https://ld.stadt-zuerich.ch/statistics/view/V000002'))
 
   const observations = await view.observations()
+  console.log('---------')
   console.log('view.observations().length', observations.length)
 
   const count = await view.observationCount()
+  console.log('---------')
   console.log('count', count)
 
-  // Constraints that apply to each dimension
-  await view.fetchCubeShape()
-
-  for (const dimension of view.dimensions) {
-    const cubeDimension = dimension.cubeDimensions[0]
-    // Some cube dimensions are undefined?
-    if (cubeDimension) {
-      console.log(cubeDimension.path, cubeDimension.cube)
-    }
-  }
+  console.log('---------')
+  console.log('All cubes', view.cubes())
 }
 
 main()

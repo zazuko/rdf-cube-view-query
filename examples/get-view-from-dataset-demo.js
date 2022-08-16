@@ -6,22 +6,27 @@ async function main () {
   const { dataset, term } = getSampleData()
   const { view } = ViewBuilder.fromDataset({ dataset, term })
 
-  console.log('sources', view.sources().map(s => s.endpoint))
+  console.log('---------')
+  console.log('All sources', view.sources().map(x => x.endpoint))
 
   const observations = await view.observations()
+  console.log('---------')
   console.log('view.observations().length', observations.length)
 
   const count = await view.observationCount()
+  console.log('---------')
   console.log('count', count)
 
+  console.log('---------')
+  console.log('All cubes', view.cubes())
+
   // Constraints that apply to each dimension
-  await view.fetchCubeShape()
+  await view.fetchCubesShapes()
 
-  console.log('cubes', view.cubes())
-
+  console.log('---------')
   for (const dimension of view.dimensions) {
     const cubeDimension = dimension.cubeDimensions[0]
-    console.log(cubeDimension.path.value, 'from cube', cubeDimension.cube.value)
+    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes)
   }
 }
 
