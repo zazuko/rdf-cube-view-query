@@ -1,10 +1,12 @@
-const { strictEqual } = require('assert')
+const { strictEqual, throws } = require('assert')
 const withServer = require('express-as-promise/withServer')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
 const Source = require('../lib/Source')
 const View = require('../lib/View')
 const ns = require('./support/namespaces')
+const { Parser } = require('n3')
+const { ViewBuilder } = require('../lib/viewUtils.js')
 
 describe('View', () => {
   it('should be a constructor', () => {
@@ -411,6 +413,55 @@ describe('View', () => {
 
         strictEqual(query.includes('DISTINCT'), false)
       })
+    })
+  })
+
+  describe('.getMainSource', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.getMainSource, 'function')
+    })
+
+    it('fails when there is no source defined', () => {
+      const view = new View({ })
+
+      throws(() => {
+        view.getMainSource()
+      }, {
+        name: 'Error',
+        message: 'Needs a explicit Source or a source attached to the CubeDimensions'
+      })
+    })
+
+    it('gets the source if explicitly defined', () => {
+      const expected = new Source({ endpointUrl: ns.ex.endpoint.value })
+      const view = new View({ source: expected })
+      const actual = view.getMainSource()
+      strictEqual(actual, expected)
+    })
+
+    it('gets the source from a cube', () => {
+      const viewTTL = `
+<https://example.org/view> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/View> .
+<https://example.org/view> <https://cube.link/view/dimension> _:b37 .
+_:b37 <https://cube.link/view/from> _:b38 .
+_:b37 <https://cube.link/view/as> <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> .
+_:b38 <https://cube.link/view/source> _:b34 .
+_:b38 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> .
+_:b34 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/CubeSource> .
+_:b34 <https://cube.link/view/endpoint> <http://example.org/endpoint> .
+_:b34 <https://cube.link/view/cube> <https://ld.stadt-zuerich.ch/statistics/BEW-SEX> .
+`
+      const parser = new Parser()
+
+      const quads = parser.parse(viewTTL)
+      const dataset = rdf.dataset().addAll(quads)
+      const term = rdf.namedNode('https://example.org/view')
+      const { view } = ViewBuilder.fromDataset({ dataset, term })
+
+      const source = view.getMainSource()
+      strictEqual(source.endpoint.value, ns.ex.endpoint.value)
     })
   })
 })
