@@ -34,8 +34,7 @@ async function main () {
 
   console.log('---------')
   for (const dimension of view.dimensions) {
-    const cubeDimension = dimension.cubeDimensions[0]
-    console.log('dimension', cubeDimension.path?.value, 'from cubes', dimension.cubes.map(x => x.value))
+    console.log('dimensions', dimension.cubeDimensions.map(x => x.path.value), 'from cubes', dimension.cubes.map(x => x.value))
   }
 }
 
