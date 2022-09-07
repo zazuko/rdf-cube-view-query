@@ -8,6 +8,10 @@ describe('query/ViewQuery', () => {
     strictEqual(typeof ViewQuery, 'function')
   })
 
+  it('should generate a query with the given columns in the result set', async () => {
+    await compareViewQuery({ name: 'columns' })
+  })
+
   it('should generate a query without distinct if disableDistinct is true', async () => {
     await compareViewQuery({ disableDistinct: true, name: 'disableDistinct' })
   })
