@@ -23,6 +23,12 @@ async function main () {
   await view.fetchCubesShapes()
 
   console.log('---------')
+  console.log('shape quads count', view.shapesQuads.length)
+
+  console.log('---------')
+  console.log('shapes data', rdf.dataset().addAll(view.shapesQuads).toString())
+
+  console.log('---------')
   for (const dimension of view.dimensions) {
     console.log('dimensions', dimension.cubeDimensions.map(x => x.path.value), 'from cubes', dimension.cubes.map(x => x.value))
   }
