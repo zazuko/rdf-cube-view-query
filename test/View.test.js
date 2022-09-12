@@ -7,6 +7,7 @@ const View = require('../lib/View')
 const ns = require('./support/namespaces')
 const { Parser } = require('n3')
 const { ViewBuilder } = require('../lib/viewUtils.js')
+const Filter = require('../lib/Filter.js')
 
 describe('View', () => {
   it('should be a constructor', () => {
@@ -462,6 +463,37 @@ _:b34 <https://cube.link/view/cube> <https://ld.stadt-zuerich.ch/statistics/BEW-
 
       const source = view.getMainSource()
       strictEqual(source.endpoint.value, ns.ex.endpoint.value)
+    })
+  })
+
+  describe('.clearFilter', () => {
+    it('should be a method', () => {
+      const view = new View()
+
+      strictEqual(typeof view.clearFilter, 'function')
+    })
+
+    it('should delete a specific filter', () => {
+      const view = new View()
+      const filter1 = new Filter({
+        parent: view,
+        dataset: view.dataset,
+        dimension: ns.ex.dimension1,
+        arg: ns.ex.arg1
+      })
+      const filter2 = new Filter({
+        parent: view,
+        dataset: view.dataset,
+        dimension: ns.ex.dimension2,
+        arg: ns.ex.arg2
+      })
+
+      view.addFilter(filter1)
+      view.addFilter(filter2)
+
+      view.clearFilter(filter1)
+
+      strictEqual(view.dataset.size, 7)
     })
   })
 })
