@@ -1,4 +1,4 @@
-const { strictEqual, throws } = require('assert')
+const { strictEqual, notStrictEqual, throws } = require('assert')
 const withServer = require('express-as-promise/withServer')
 const { describe, it } = require('mocha')
 const rdf = require('rdf-ext')
@@ -8,6 +8,7 @@ const ns = require('./support/namespaces')
 const { Parser } = require('n3')
 const { ViewBuilder } = require('../lib/viewUtils.js')
 const Filter = require('../lib/Filter.js')
+const buildCube = require('./support/buildCube')
 
 describe('View', () => {
   it('should be a constructor', () => {
@@ -444,22 +445,25 @@ describe('View', () => {
 
     it('gets the source from a cube', () => {
       const viewTTL = `
-<https://example.org/view> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/View> .
-<https://example.org/view> <https://cube.link/view/dimension> _:b37 .
-_:b37 <https://cube.link/view/from> _:b38 .
-_:b37 <https://cube.link/view/as> <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> .
-_:b38 <https://cube.link/view/source> _:b34 .
-_:b38 <https://cube.link/view/path> <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> .
-_:b34 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/view/CubeSource> .
-_:b34 <https://cube.link/view/endpoint> <http://example.org/endpoint> .
-_:b34 <https://cube.link/view/cube> <https://ld.stadt-zuerich.ch/statistics/BEW-SEX> .
+@prefix view: <https://cube.link/view/> .
+@prefix ex: <http://example.org/> .
+ex:view a view:View ;
+  view:dimension [
+        view:from [
+            view:source [
+                a view:CubeSource ;
+                view:endpoint <http://example.org/endpoint> ;
+                view:cube <https://ld.stadt-zuerich.ch/statistics/BEW-SEX> ;
+            ] ;
+            view:path <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> ;
+        ] ;
+        view:as <https://ld.stadt-zuerich.ch/statistics/property/ZEIT> ;
+    ] .
 `
       const parser = new Parser()
+      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
 
-      const quads = parser.parse(viewTTL)
-      const dataset = rdf.dataset().addAll(quads)
-      const term = rdf.namedNode('https://example.org/view')
-      const { view } = ViewBuilder.fromDataset({ dataset, term })
+      const { view } = ViewBuilder.fromDataset({ dataset, term: ns.ex.view })
 
       const source = view.getMainSource()
       strictEqual(source.endpoint.value, ns.ex.endpoint.value)
@@ -494,6 +498,100 @@ _:b34 <https://cube.link/view/cube> <https://ld.stadt-zuerich.ch/statistics/BEW-
       view.clearFilter(filter1)
 
       strictEqual(view.dataset.size, 7)
+    })
+  })
+
+  describe('.projectionDimensions', () => {
+    it('should be a getter', () => {
+      const view = new View()
+
+      strictEqual(typeof view.projectionDimensions, 'object')
+    })
+
+    it('should return null if no columns specified in projection', () => {
+      const viewTTL = `
+@prefix view: <https://cube.link/view/> .
+@prefix ex: <http://example.org/> .
+
+ex:view a view:View .
+ex:view view:dimension ex:dimension1, ex:dimension2, ex:dimension3 .
+`
+      const parser = new Parser()
+      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
+      const { view } = ViewBuilder.fromDataset({ dataset, term: ns.ex.view })
+      const columns = view.projectionDimensions
+
+      strictEqual(columns, null)
+    })
+
+    it('should return only the specified columns in order', () => {
+      const viewTTL = `
+@prefix view: <https://cube.link/view/> .
+@prefix ex: <http://example.org/> .
+
+ex:view a view:View .
+ex:view view:dimension ex:dimension1, ex:dimension2, ex:dimension3 .
+ex:view view:projection [
+    view:columns (ex:dimension3 ex:dimension1 ex:unknownDimension) ;
+] .
+`
+      const parser = new Parser()
+      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
+      const { view } = ViewBuilder.fromDataset({ dataset, term: ns.ex.view })
+
+      const columns = view.projectionDimensions
+      notStrictEqual(columns, null)
+      strictEqual(columns.length, 2)
+      strictEqual(columns[0].ptr.term.value, ns.ex.dimension3.value)
+      strictEqual(columns[1].ptr.term.value, ns.ex.dimension1.value)
+    })
+  })
+
+  describe('.fromCube', () => {
+    it('should be a method', () => {
+      strictEqual(typeof View.fromCube, 'function')
+    })
+
+    it('the resulting view should contain the dimensions of the cube', () => {
+      const cube = buildCube({
+        dimensions: [{
+          path: ns.ex.propertyA
+        }, {
+          path: ns.ex.propertyB
+        }]
+      })
+
+      const view = View.fromCube(cube)
+
+      const dimensions = view.dimensions
+
+      notStrictEqual(dimensions, null)
+      strictEqual(dimensions.length, 2)
+      strictEqual(dimensions[0].cubeDimensions.length, 1)
+      strictEqual(dimensions[1].cubeDimensions.length, 1)
+      strictEqual(dimensions[0].cubeDimensions[0].path.value, ns.ex.propertyA.value)
+      strictEqual(dimensions[1].cubeDimensions[0].path.value, ns.ex.propertyB.value)
+    })
+
+    it('the resulting view should contain a default ordering', () => {
+      const cube = buildCube({
+        dimensions: [{
+          path: ns.ex.property2
+        }, {
+          path: ns.ex.property1
+        }]
+      })
+
+      const view = View.fromCube(cube)
+
+      const dimensions = view.projectionDimensions
+
+      notStrictEqual(dimensions, null)
+      strictEqual(dimensions.length, 2)
+      strictEqual(dimensions[0].cubeDimensions.length, 1)
+      strictEqual(dimensions[1].cubeDimensions.length, 1)
+      strictEqual(dimensions[0].cubeDimensions[0].path.value, ns.ex.property1.value)
+      strictEqual(dimensions[1].cubeDimensions[0].path.value, ns.ex.property2.value)
     })
   })
 })
