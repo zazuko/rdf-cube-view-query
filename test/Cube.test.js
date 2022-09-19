@@ -78,7 +78,7 @@ describe('Cube', () => {
 
         await cube.fetchCube()
 
-        strictEqual(cube.ptr.dataset.size, 10)
+        strictEqual(cube.ptr.dataset.size, 9)
         strictEqual(cube.ptr.dataset.has(quad), true)
       })
     })
@@ -139,7 +139,7 @@ describe('Cube', () => {
 
         await cube.fetchShape()
 
-        strictEqual(cube.ptr.dataset.size, 10)
+        strictEqual(cube.ptr.dataset.size, 9)
         strictEqual(cube.ptr.dataset.has(quad), true)
       })
     })
