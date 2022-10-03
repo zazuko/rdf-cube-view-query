@@ -296,6 +296,28 @@ describe('View', () => {
         strictEqual(query.includes('DISTINCT'), false)
       })
     })
+
+    it('should use a prefix if specified', async () => {
+      await withServer(async server => {
+        let query = null
+
+        server.app.get('/', (req, res) => {
+          query = req.query.query
+
+          res.status(201).end()
+        })
+
+        const source = new Source({ endpointUrl: await server.listen(), queryPrefix: 'Some prefix' })
+        const view = new View({ parent: source })
+        view.addDimension(
+          view.createDimension({ path: ns.ex.dimension, source }))
+
+        await view.observations(
+          { disableDistinct: true })
+
+        strictEqual(query.startsWith('Some prefix\n'), true)
+      })
+    })
   })
 
   describe('observationCount', () => {
@@ -414,6 +436,35 @@ describe('View', () => {
         await view.observationCount({ disableDistinct: true })
 
         strictEqual(query.includes('DISTINCT'), false)
+      })
+    })
+
+    it('should use a prefix if specified', async () => {
+      await withServer(async server => {
+        let query = null
+
+        server.app.get('/', (req, res) => {
+          query = req.query.query
+
+          res.status(200).set('content-type', 'application/sparql-results+json').json({
+            head: {
+              vars: ['count']
+            },
+            results: {
+              bindings: [{
+                count: { type: 'literal', value: '5' }
+              }]
+            }
+          })
+        })
+
+        const source = new Source({ endpointUrl: await server.listen(), queryPrefix: 'Some prefix' })
+        const view = new View({ parent: source })
+        view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
+
+        await view.observationCount({ disableDistinct: true })
+
+        strictEqual(query.startsWith('Some prefix\n'), true)
       })
     })
   })
