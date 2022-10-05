@@ -2,8 +2,12 @@ const { Source } = require('..')
 const rdf = require('rdf-ext')
 
 async function main () {
+  const queryPrefix = `#pragma describe.strategy cbd
+#pragma join.hash off
+`
   const source = new Source({
-    endpointUrl: 'https://int.lindas.admin.ch/query'
+    endpointUrl: 'https://int.lindas.admin.ch/query',
+    queryPrefix
   })
 
   const view = await source.view(rdf.namedNode('https://ld.stadt-zuerich.ch/statistics/view/V000002'))

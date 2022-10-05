@@ -1,8 +1,12 @@
 const { Source, View } = require('..')
 
 async function main () {
+  const queryPrefix = `#pragma describe.strategy cbd
+#pragma join.hash off`
+
   const source = new Source({
-    endpointUrl: 'https://int.lindas.admin.ch/query'
+    endpointUrl: 'https://int.lindas.admin.ch/query',
+    queryPrefix
   })
 
   const cube = await source.cube('https://ld.stadt-zuerich.ch/statistics/ZUS-BTA-ZSA')
