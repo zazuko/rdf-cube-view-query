@@ -644,5 +644,22 @@ ex:view view:projection [
       strictEqual(dimensions[0].cubeDimensions[0].path.value, ns.ex.property1.value)
       strictEqual(dimensions[1].cubeDimensions[0].path.value, ns.ex.property2.value)
     })
+
+    it('View.fromCube should fail with an explanation if required path is missing', () => {
+      const cube = buildCube({
+        dimensions: [{
+          path: ns.ex.propertyA
+        }, {
+          path: undefined
+        }]
+      })
+
+      throws(() => {
+        View.fromCube(cube)
+      }, {
+        name: 'Error',
+        message: /Cube dimension <[^>]+> requires a path/
+      })
+    })
   })
 })
