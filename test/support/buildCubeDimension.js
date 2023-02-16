@@ -8,7 +8,9 @@ function buildCubeDimension ({ shape, path, datatype, nodeKind = 'Literal', opti
     shape = clownface({ term: rdf.blankNode(), dataset: rdf.dataset() })
   }
 
-  shape.addOut(ns.sh.path, path)
+  if (path) {
+    shape.addOut(ns.sh.path, path)
+  }
 
   if (nodeKind) {
     if (nodeKind === 'Literal') {
