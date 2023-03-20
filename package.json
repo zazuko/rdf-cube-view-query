@@ -4,7 +4,8 @@
   "description": "RDF Cube View Schema query library",
   "main": "index.js",
   "scripts": {
-    "test": "standard && mocha"
+    "test": "standard && mocha",
+    "release": "changeset publish"
   },
   "author": "Thomas Bergwinkl <bergi@axolotlfarm.org> (https://www.bergnet.org/people/bergi/card#me)",
   "license": "MIT",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/zazuko/rdf-cube-view-query",
   "dependencies": {
+    "@changesets/cli": "^2.26.0",
     "@rdfjs/namespace": "^1.1.0",
     "@rdfjs/term-map": "^1.0.0",
     "@rdfjs/term-set": "^1.0.1",
