@@ -94,7 +94,10 @@ describe('Dimensions', () => {
 
     const dimensions = new Dimensions({ view, variable: () => {} })
 
-    strictEqual(false, dimensions.array[0].isResult)
+    const exSome = dimensions.array.find(dim => dim.property.equals(ns.ex.some))
+    const exNotThat = dimensions.array.find(dim => dim.property.equals(ns.ex.notThat))
+    strictEqual(true, exSome.isResult)
+    strictEqual(false, exNotThat.isResult)
   })
 
   it('sets isResult flag when there is no projection', () => {
