@@ -30,9 +30,11 @@
   },
   "devDependencies": {
     "@rdfjs/express-handler": "^1.2.2",
+    "@tpluscode/rdf-string": "^0.2.27",
     "express-as-promise": "^1.2.0",
     "lodash": "^4.17.21",
     "mocha": "^8.2.1",
+    "n3": "^1.16.3",
     "rdf-utils-fs": "^2.1.0",
     "standard": "^14.3.4"
   }
