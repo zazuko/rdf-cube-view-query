@@ -1,28 +1,21 @@
 const { strictEqual } = require('assert')
 const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const clownface = require('clownface')
 
 const ns = require('../support/namespaces')
 const Dimensions = require('../../lib/query/ViewQuery/Dimensions.js')
-const { Parser } = require('n3')
+const { parse } = require('../support/utils')
 
 describe('Dimensions', () => {
   it('gets the property from view:as', () => {
-    const viewTTL = `
-@prefix view: <https://cube.link/view/> .
-@prefix ex: <http://example.org/> .
-ex:view a view:View ;
-  view:dimension [
-        view:from [
-            view:path ex:someOther ;
-        ] ;
-        view:as ex:some ;
-    ] .
-`
-    const parser = new Parser()
-    const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
-    const view = clownface({ dataset, term: ns.ex.view })
+    const view = parse`
+        ${ns.ex.view} a ${ns.view.View} ;
+          ${ns.view.dimension} [
+                ${ns.view.from} [
+                    ${ns.view.path} ${ns.ex.someOther} 
+                ] ;
+                ${ns.view.as} ${ns.ex.some} ;
+            ] .
+    `.node(ns.ex.view)
 
     const dimensions = new Dimensions({ view, variable: () => {} })
 
@@ -31,19 +24,14 @@ ex:view a view:View ;
 
   it('gets the property from path when view:as is not defined and path is an IRI',
     () => {
-      const viewTTL = `
-@prefix view: <https://cube.link/view/> .
-@prefix ex: <http://example.org/> .
-ex:view a view:View ;
-  view:dimension [
-        view:from [
-            view:path ex:someOther ;
-        ] ;
-    ] .
-`
-      const parser = new Parser()
-      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
-      const view = clownface({ dataset, term: ns.ex.view })
+      const view = parse`
+        ${ns.ex.view} a ${ns.view.View} ;
+          ${ns.view.dimension} [
+                ${ns.view.from} [
+                    ${ns.view.path} ${ns.ex.someOther} 
+                ] ;
+            ] .
+      `.node(ns.ex.view)
 
       const dimensions = new Dimensions({ view, variable: () => {} })
 
@@ -53,22 +41,17 @@ ex:view a view:View ;
   it(
     'gets a blank as property when view:as is not defined and path is a list',
     () => {
-      const viewTTL = `
-@prefix view: <https://cube.link/view/> .
-@prefix ex: <http://example.org/> .
-ex:view a view:View ;
-  view:dimension [
-        view:from [
-            view:path (
-              ex:some 
-              ex:someOther
-            ) ;
-        ] ;
-    ] .
-`
-      const parser = new Parser()
-      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
-      const view = clownface({ dataset, term: ns.ex.view })
+      const view = parse`
+        ${ns.ex.view} a ${ns.view.View} ;
+          ${ns.view.dimension} [
+                ${ns.view.from} [
+                    ${ns.view.path} (
+                      ${ns.ex.some}
+                      ${ns.ex.someOther} 
+                    ) ;
+                ] ;
+            ] .
+      `.node(ns.ex.view)
 
       const dimensions = new Dimensions({ view, variable: () => {} })
 
@@ -78,22 +61,67 @@ ex:view a view:View ;
   it(
     'gets a blank as property when view:as is not defined and path is a blank',
     () => {
-      const viewTTL = `
-@prefix view: <https://cube.link/view/> .
-@prefix ex: <http://example.org/> .
-ex:view a view:View ;
-  view:dimension [
-        view:from [
-            view:path [ ex:notMe ex:please ] ;
-        ] ;
-    ] .
-`
-      const parser = new Parser()
-      const dataset = rdf.dataset().addAll(parser.parse(viewTTL))
-      const view = clownface({ dataset, term: ns.ex.view })
+      const view = parse`
+        ${ns.ex.view} a ${ns.view.View} ;
+          ${ns.view.dimension} [
+                ${ns.view.from} [
+                    ${ns.view.path} [ ${ns.ex.notMe} ${ns.ex.please} ] ;
+                ] ;
+            ] .
+      `.node(ns.ex.view)
 
       const dimensions = new Dimensions({ view, variable: () => {} })
 
       strictEqual('BlankNode', dimensions.array[0].property.termType)
     })
+
+  it('sets isResult flag when dimension is used in projection', () => {
+    const view = parse`
+      ${ns.ex.view} a ${ns.view.View} ;
+        ${ns.view.projection} [
+          ${ns.view.columns} ( _:dimension ) ;
+        ] ;
+        ${ns.view.dimension} _:dimension .
+        
+      _:dimension ${ns.view.from} [
+        ${ns.view.path} ${ns.ex.some} 
+      ] .
+    `.node(ns.ex.view)
+
+    const dimensions = new Dimensions({ view, variable: () => {} })
+
+    strictEqual(true, dimensions.array[0].isResult)
+  })
+
+  it('does not set isResult flag when dimension is not used in projection', () => {
+    const view = parse`
+      ${ns.ex.view} a ${ns.view.View} ;
+        ${ns.view.dimension} _:dimension .
+        
+      _:dimension ${ns.view.from} [
+        ${ns.view.path} ${ns.ex.some} 
+      ] .
+    `.node(ns.ex.view)
+
+    const dimensions = new Dimensions({ view, variable: () => {} })
+
+    strictEqual(false, dimensions.array[0].isResult)
+  })
+
+  it('sets isFilter flag when dimension is used in a filter', () => {
+    const view = parse`
+      ${ns.ex.view} a ${ns.view.View} ;
+        ${ns.view.dimension} _:dimension ;
+        ${ns.view.filter} [ ${ns.view.dimension} _:dimension ; ] ;
+      .
+        
+      _:dimension ${ns.view.from} [
+        ${ns.view.path} ${ns.ex.some} 
+      ] .
+    `.node(ns.ex.view)
+
+    const dimensions = new Dimensions({ view, variable: () => {} })
+
+    strictEqual(true, dimensions.array[0].isFilter)
+  })
 })
