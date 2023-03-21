@@ -55,4 +55,8 @@ describe('query/ViewQuery', () => {
   it('should generate a Stardog text search filter', async () => {
     await compareViewQuery({ name: 'stardogTextSearch' })
   })
+
+  it('should generate only generate query with projected columns', async () => {
+    await compareViewQuery({ name: 'projection' })
+  })
 })

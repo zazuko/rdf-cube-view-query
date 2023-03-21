@@ -75,12 +75,31 @@ describe('Dimensions', () => {
       strictEqual('BlankNode', dimensions.array[0].property.termType)
     })
 
-  it('sets isResult flag when dimension is used in projection', () => {
+  it('does not set isResult flag when dimension is not used in projection', () => {
     const view = parse`
       ${ns.ex.view} a ${ns.view.View} ;
         ${ns.view.projection} [
           ${ns.view.columns} ( _:dimension ) ;
         ] ;
+        ${ns.view.dimension} _:dimension, _:excluded .
+        
+      _:dimension ${ns.view.from} [
+        ${ns.view.path} ${ns.ex.some} 
+      ] .
+      
+      _:excluded ${ns.view.from} [
+        ${ns.view.path} ${ns.ex.notThat} 
+      ] .
+    `.node(ns.ex.view)
+
+    const dimensions = new Dimensions({ view, variable: () => {} })
+
+    strictEqual(false, dimensions.array[0].isResult)
+  })
+
+  it('sets isResult flag when there is no projection', () => {
+    const view = parse`
+      ${ns.ex.view} a ${ns.view.View} ;
         ${ns.view.dimension} _:dimension .
         
       _:dimension ${ns.view.from} [
@@ -91,21 +110,6 @@ describe('Dimensions', () => {
     const dimensions = new Dimensions({ view, variable: () => {} })
 
     strictEqual(true, dimensions.array[0].isResult)
-  })
-
-  it('does not set isResult flag when dimension is not used in projection', () => {
-    const view = parse`
-      ${ns.ex.view} a ${ns.view.View} ;
-        ${ns.view.dimension} _:dimension .
-        
-      _:dimension ${ns.view.from} [
-        ${ns.view.path} ${ns.ex.some} 
-      ] .
-    `.node(ns.ex.view)
-
-    const dimensions = new Dimensions({ view, variable: () => {} })
-
-    strictEqual(false, dimensions.array[0].isResult)
   })
 
   it('sets isFilter flag when dimension is used in a filter', () => {
