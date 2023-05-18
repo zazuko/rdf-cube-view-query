@@ -17,6 +17,10 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm install
       - run: npm test
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
   lint:
     runs-on: ubuntu-latest
     steps:
