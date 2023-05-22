@@ -645,6 +645,43 @@ ex:view view:projection [
       strictEqual(dimensions[1].cubeDimensions[0].path.value, ns.ex.property2.value)
     })
 
+    it.skip('should sort large cube in a timely manner', function () {
+      this.timeout(200)
+
+      // given
+      const dimensions = [...Array(100).keys()].map((_, i) => ({
+        path: ns.ex(`property${i}`)
+      }))
+
+      const cube = buildCube({
+        dimensions
+      })
+
+      View.fromCube(cube)
+    })
+
+    it('allows opting-out from sorting dimensions', () => {
+      // given
+      const cube = buildCube({
+        dimensions: [{
+          path: ns.ex.property2
+        }, {
+          path: ns.ex.property1
+        }]
+      })
+
+      // when
+      const view = View.fromCube(cube, false)
+      const dimensions = view.projectionDimensions
+
+      // then
+      strictEqual(dimensions.length, 2)
+      strictEqual(dimensions[0].cubeDimensions.length, 1)
+      strictEqual(dimensions[1].cubeDimensions.length, 1)
+      strictEqual(dimensions[0].cubeDimensions[0].path.value, ns.ex.property2.value)
+      strictEqual(dimensions[1].cubeDimensions[0].path.value, ns.ex.property1.value)
+    })
+
     it('View.fromCube should fail with an explanation if required path is missing', () => {
       const cube = buildCube({
         dimensions: [{
