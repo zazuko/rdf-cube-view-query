@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm install
-      - run: npm test -- -s 20
+      - run: npm test
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
