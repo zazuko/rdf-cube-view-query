@@ -1,6 +1,6 @@
 {
   "name": "rdf-cube-view-query",
-  "version": "1.11.2",
+  "version": "1.12.0",
   "description": "RDF Cube View Schema query library",
   "main": "index.js",
   "scripts": {
