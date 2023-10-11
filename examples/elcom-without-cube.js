@@ -1,17 +1,17 @@
-const { CubeSource, Source, View } = require('..')
-const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
+import rdf from '@zazuko/env'
+import namespace from '@rdfjs/namespace'
+import { CubeSource, Source, View } from '../index.js'
 
 const ns = {
   energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'https://test.lindas.admin.ch/query',
-    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice'
+    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice',
     // user: '',
     // password: ''
   })
@@ -24,7 +24,7 @@ async function main () {
   // now let's create the first dimension
   const periodDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.energyPricing.period
+    path: ns.energyPricing.period,
   })
 
   // and we add it to the view
@@ -39,7 +39,7 @@ async function main () {
   // let's create a second dimension
   const municipalityDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.energyPricing.municipality
+    path: ns.energyPricing.municipality,
   })
 
   // and we add it to the view
@@ -48,7 +48,7 @@ async function main () {
   // and again a filter for it
   const municipalityFilter = municipalityDimension.filter.in([
     rdf.namedNode('https://register.ld.admin.ch/municipality/3215'),
-    rdf.namedNode('https://register.ld.admin.ch/municipality/58')
+    rdf.namedNode('https://register.ld.admin.ch/municipality/58'),
   ])
 
   // and add it to the view

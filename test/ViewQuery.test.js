@@ -1,7 +1,6 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const ViewQuery = require('../lib/query/ViewQuery')
-const { compareViewCountQuery, compareViewQuery } = require('./support/compareViewQuery')
+import { strictEqual } from 'assert'
+import ViewQuery from '../lib/query/ViewQuery/index.js'
+import { compareViewCountQuery, compareViewQuery } from './support/compareViewQuery.js'
 
 describe('query/ViewQuery', () => {
   it('should be a constructor', () => {

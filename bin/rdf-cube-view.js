@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
-const { Source, View } = require('..')
-const { collect, cubeFilter, toCsv, toTerm } = require('../lib/utils-cli')
-
-const program = require('commander')
+import program from 'commander'
+import { Source, View } from '../index.js'
+import { collect, cubeFilter, toCsv, toTerm } from '../lib/utils-cli.js'
 
 program
   .command('cube-dimensions')

@@ -1,8 +1,7 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const cubeQuery = require('../lib/query/cube')
-const { compareQuery } = require('./support/compareQuery')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import { cubeQuery } from '../lib/query/cube.js'
+import * as ns from './support/namespaces.js'
+import { compareQuery } from './support/compareQuery.js'
 
 describe('query/cube', () => {
   it('should be a function', () => {

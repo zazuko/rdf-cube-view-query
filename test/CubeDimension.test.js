@@ -1,9 +1,8 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const CubeDimension = require('../lib/CubeDimension')
-const buildCubeDimension = require('./support/buildCubeDimension')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import rdf from '@zazuko/env'
+import CubeDimension from '../lib/CubeDimension.js'
+import * as ns from './support/namespaces.js'
+import buildCubeDimension from './support/buildCubeDimension.js'
 
 describe('CubeDimension', () => {
   it('should be a constructor', () => {

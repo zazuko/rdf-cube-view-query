@@ -1,16 +1,16 @@
-const { LookupSource, Source, View } = require('..')
-const namespace = require('@rdfjs/namespace')
+import namespace from '@rdfjs/namespace'
+import { LookupSource, Source, View } from '../index.js'
 
 const ns = {
   energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  schema: namespace('http://schema.org/')
+  schema: namespace('http://schema.org/'),
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'https://test.lindas.admin.ch/query',
-    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice'
+    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice',
     // user: '',
     // password: ''
   })
@@ -30,7 +30,7 @@ async function main () {
     source: lookup,
     path: ns.schema.name,
     join: operatorDimension,
-    as: ns.energyPricing.operatorLabel
+    as: ns.energyPricing.operatorLabel,
   })
 
   const operatorLabelLanguageFilter = operatorLabelDimension.filter.lang(['de', 'en', '*'])

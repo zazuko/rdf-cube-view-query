@@ -1,14 +1,13 @@
-const { strictEqual, notStrictEqual, throws } = require('assert')
-const withServer = require('express-as-promise/withServer')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const Source = require('../lib/Source')
-const View = require('../lib/View')
-const ns = require('./support/namespaces')
-const { Parser } = require('n3')
-const { ViewBuilder } = require('../lib/builders.js')
-const Filter = require('../lib/Filter.js')
-const buildCube = require('./support/buildCube')
+import { strictEqual, notStrictEqual, throws } from 'assert'
+import withServer from 'express-as-promise/withServer.js'
+import rdf from '@zazuko/env'
+import { Parser } from 'n3'
+import Source from '../lib/Source.js'
+import View from '../lib/View.js'
+import { ViewBuilder } from '../lib/builders.js'
+import Filter from '../lib/Filter.js'
+import * as ns from './support/namespaces.js'
+import { buildCube } from './support/buildCube.js'
 
 describe('View', () => {
   it('should be a constructor', () => {
@@ -336,13 +335,13 @@ describe('View', () => {
 
           res.status(200).set('content-type', 'application/sparql-results+json').json({
             head: {
-              vars: ['count']
+              vars: ['count'],
             },
             results: {
               bindings: [{
-                count: { type: 'literal', value: '5' }
-              }]
-            }
+                count: { type: 'literal', value: '5' },
+              }],
+            },
           })
         })
 
@@ -365,13 +364,13 @@ describe('View', () => {
 
           res.status(200).set('content-type', 'application/sparql-results+json').json({
             head: {
-              vars: ['count']
+              vars: ['count'],
             },
             results: {
               bindings: [{
-                count: { type: 'literal', value: '5' }
-              }]
-            }
+                count: { type: 'literal', value: '5' },
+              }],
+            },
           })
         })
 
@@ -390,13 +389,13 @@ describe('View', () => {
         server.app.post('/', (req, res) => {
           res.status(200).set('content-type', 'application/sparql-results+json').json({
             head: {
-              vars: ['count']
+              vars: ['count'],
             },
             results: {
               bindings: [{
-                count: { type: 'literal', value: '5' }
-              }]
-            }
+                count: { type: 'literal', value: '5' },
+              }],
+            },
           })
         })
 
@@ -419,13 +418,13 @@ describe('View', () => {
 
           res.status(200).set('content-type', 'application/sparql-results+json').json({
             head: {
-              vars: ['count']
+              vars: ['count'],
             },
             results: {
               bindings: [{
-                count: { type: 'literal', value: '5' }
-              }]
-            }
+                count: { type: 'literal', value: '5' },
+              }],
+            },
           })
         })
 
@@ -448,13 +447,13 @@ describe('View', () => {
 
           res.status(200).set('content-type', 'application/sparql-results+json').json({
             head: {
-              vars: ['count']
+              vars: ['count'],
             },
             results: {
               bindings: [{
-                count: { type: 'literal', value: '5' }
-              }]
-            }
+                count: { type: 'literal', value: '5' },
+              }],
+            },
           })
         })
 
@@ -483,7 +482,7 @@ describe('View', () => {
         view.getMainSource()
       }, {
         name: 'Error',
-        message: 'Needs a explicit Source or a source attached to the CubeDimensions'
+        message: 'Needs a explicit Source or a source attached to the CubeDimensions',
       })
     })
 
@@ -534,13 +533,13 @@ ex:view a view:View ;
         parent: view,
         dataset: view.dataset,
         dimension: ns.ex.dimension1,
-        arg: ns.ex.arg1
+        arg: ns.ex.arg1,
       })
       const filter2 = new Filter({
         parent: view,
         dataset: view.dataset,
         dimension: ns.ex.dimension2,
-        arg: ns.ex.arg2
+        arg: ns.ex.arg2,
       })
 
       view.addFilter(filter1)
@@ -606,10 +605,10 @@ ex:view view:projection [
     it('the resulting view should contain the dimensions of the cube', () => {
       const cube = buildCube({
         dimensions: [{
-          path: ns.ex.propertyA
+          path: ns.ex.propertyA,
         }, {
-          path: ns.ex.propertyB
-        }]
+          path: ns.ex.propertyB,
+        }],
       })
 
       const view = View.fromCube(cube)
@@ -627,10 +626,10 @@ ex:view view:projection [
     it('the resulting view should contain a default ordering', () => {
       const cube = buildCube({
         dimensions: [{
-          path: ns.ex.property2
+          path: ns.ex.property2,
         }, {
-          path: ns.ex.property1
-        }]
+          path: ns.ex.property1,
+        }],
       })
 
       const view = View.fromCube(cube)
@@ -650,11 +649,11 @@ ex:view view:projection [
 
       // given
       const dimensions = [...Array(100).keys()].map((_, i) => ({
-        path: ns.ex(`property${i}`)
+        path: ns.ex(`property${i}`),
       }))
 
       const cube = buildCube({
-        dimensions
+        dimensions,
       })
 
       View.fromCube(cube)
@@ -664,10 +663,10 @@ ex:view view:projection [
       // given
       const cube = buildCube({
         dimensions: [{
-          path: ns.ex.property2
+          path: ns.ex.property2,
         }, {
-          path: ns.ex.property1
-        }]
+          path: ns.ex.property1,
+        }],
       })
 
       // when
@@ -685,17 +684,17 @@ ex:view view:projection [
     it('View.fromCube should fail with an explanation if required path is missing', () => {
       const cube = buildCube({
         dimensions: [{
-          path: ns.ex.propertyA
+          path: ns.ex.propertyA,
         }, {
-          path: undefined
-        }]
+          path: undefined,
+        }],
       })
 
       throws(() => {
         View.fromCube(cube)
       }, {
         name: 'Error',
-        message: /Cube dimension <[^>]+> requires a path/
+        message: /Cube dimension <[^>]+> requires a path/,
       })
     })
   })

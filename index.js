@@ -1,13 +1,13 @@
-const Cube = require('./lib/Cube')
-const CubeSource = require('./lib/CubeSource')
-const Dimension = require('./lib/Dimension')
-const Filter = require('./lib/Filter')
-const LookupSource = require('./lib/LookupSource')
-const Node = require('./lib/Node')
-const Source = require('./lib/Source')
-const View = require('./lib/View')
+import Cube from './lib/Cube.js'
+import CubeSource from './lib/CubeSource.js'
+import Dimension from './lib/Dimension.js'
+import Filter from './lib/Filter.js'
+import LookupSource from './lib/LookupSource.js'
+import Node from './lib/Node.js'
+import Source from './lib/Source.js'
+import View from './lib/View.js'
 
-module.exports = {
+export {
   Cube,
   CubeSource,
   Dimension,
@@ -15,5 +15,5 @@ module.exports = {
   LookupSource,
   Node,
   Source,
-  View
+  View,
 }

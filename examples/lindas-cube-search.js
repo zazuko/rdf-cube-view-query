@@ -1,22 +1,22 @@
-const { Cube, Source } = require('..')
-const namespace = require('@rdfjs/namespace')
+import namespace from '@rdfjs/namespace'
+import { Cube, Source } from '../index.js'
 
 const ns = {
   adminTerm: namespace('https://ld.admin.ch/definedTerm/'),
-  schema: namespace('http://schema.org/')
+  schema: namespace('http://schema.org/'),
 }
 
-async function main () {
+async function main() {
   const source = new Source({
-    endpointUrl: 'https://int.lindas.admin.ch/query'
+    endpointUrl: 'https://int.lindas.admin.ch/query',
   })
 
   // the source can be used to search for cubes and allows server side filtering
   const cubes = await source.cubes({
     filters: [
       Cube.filter.noValidThrough(),
-      Cube.filter.status(ns.adminTerm('CreativeWorkStatus/Draft'))
-    ]
+      Cube.filter.status(ns.adminTerm('CreativeWorkStatus/Draft')),
+    ],
   })
 
   for (const cube of cubes) {

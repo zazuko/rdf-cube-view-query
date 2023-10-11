@@ -1,10 +1,8 @@
-const { strictEqual, deepStrictEqual } = require('assert')
-const { describe, it } = require('mocha')
-
-const Node = require('../lib/Source')
-const { Source, Dimension, View } = require('../index.js')
-const rdf = require('rdf-ext')
-const ns = require('./support/namespaces')
+import { strictEqual, deepStrictEqual } from 'assert'
+import rdf from '@zazuko/env'
+import Node from '../lib/Source.js'
+import { Source, Dimension, View } from '../index.js'
+import * as ns from './support/namespaces.js'
 
 describe('Node', () => {
   it('should be a constructor', () => {
@@ -19,7 +17,7 @@ describe('Node', () => {
     const graph = ns.ex.graph
 
     const dimension = new Dimension({
-      parent: source, term, dataset, graph, path: ns.ex.date, source
+      parent: source, term, dataset, graph, path: ns.ex.date, source,
     })
     const view = new View({ parent: source })
     const f1 = dimension.filter.eq(ns.ex.a, { parent: view })
@@ -31,9 +29,9 @@ describe('Node', () => {
     strictEqual([...source.children][0].constructor.name, dimension.constructor.name, 'should have only the dimension as child')
   })
 
-  function screenshot (node) {
+  function screenshot(node) {
     return {
-      term: node.term.value, name: node.constructor.name, size: node.dataset.size, children: node.children ? [...node.children].map(child => screenshot(child)) : undefined
+      term: node.term.value, name: node.constructor.name, size: node.dataset.size, children: node.children ? [...node.children].map(child => screenshot(child)) : undefined,
     }
   }
 
@@ -45,7 +43,7 @@ describe('Node', () => {
     const graph = ns.ex.graph
 
     const dimension = new Dimension({
-      parent: source, term, dataset, graph, path: ns.ex.date, source
+      parent: source, term, dataset, graph, path: ns.ex.date, source,
     })
 
     const noViews = screenshot(source)

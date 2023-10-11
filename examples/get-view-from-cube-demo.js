@@ -1,12 +1,12 @@
-const { Source, View } = require('..')
+import { Source, View } from '../index.js'
 
-async function main () {
+async function main() {
   const queryPrefix = `#pragma describe.strategy cbd
 #pragma join.hash off`
 
   const source = new Source({
     endpointUrl: 'https://int.lindas.admin.ch/query',
-    queryPrefix
+    queryPrefix,
   })
 
   const cube = await source.cube('https://ld.stadt-zuerich.ch/statistics/ZUS-BTA-ZSA')

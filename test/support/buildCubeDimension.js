@@ -1,11 +1,10 @@
-const CubeDimension = require('../../lib/CubeDimension')
-const clownface = require('clownface')
-const rdf = require('rdf-ext')
-const ns = require('./namespaces')
+import rdf from '@zazuko/env'
+import CubeDimension from '../../lib/CubeDimension.js'
+import * as ns from './namespaces.js'
 
-function buildCubeDimension ({ shape, path, datatype, nodeKind = 'Literal', optional = false, values = [] }) {
+export default function buildCubeDimension({ shape, path, datatype, nodeKind = 'Literal', optional = false, values = [] }) {
   if (!shape) {
-    shape = clownface({ term: rdf.blankNode(), dataset: rdf.dataset() })
+    shape = rdf.clownface({ term: rdf.blankNode(), dataset: rdf.dataset() })
   }
 
   if (path) {
@@ -44,5 +43,3 @@ function buildCubeDimension ({ shape, path, datatype, nodeKind = 'Literal', opti
 
   return new CubeDimension(shape)
 }
-
-module.exports = buildCubeDimension

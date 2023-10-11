@@ -1,8 +1,7 @@
-const { deepStrictEqual, strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const cubesQuery = require('../lib/query/cubes')
-const { compareQuery } = require('./support/compareQuery')
-const ns = require('./support/namespaces')
+import { deepStrictEqual, strictEqual } from 'assert'
+import { cubesQuery } from '../lib/query/cubes.js'
+import { compareQuery } from './support/compareQuery.js'
+import * as ns from './support/namespaces.js'
 
 describe('query/cubes', () => {
   it('should be a function', () => {
@@ -38,7 +37,7 @@ describe('query/cubes', () => {
 
     deepStrictEqual(args, [
       { name: '1', termType: 'Variable', value: 'cube', index: 0 },
-      { name: '2', termType: 'Variable', value: 'cube', index: 1 }
+      { name: '2', termType: 'Variable', value: 'cube', index: 1 },
     ])
   })
 

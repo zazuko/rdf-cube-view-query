@@ -1,8 +1,7 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const CubeSource = require('../lib/CubeSource')
-const ns = require('./support/namespaces')
-const Source = require('../lib/Source.js')
+import { strictEqual } from 'assert'
+import CubeSource from '../lib/CubeSource.js'
+import Source from '../lib/Source.js'
+import * as ns from './support/namespaces.js'
 
 describe('CubeSource', () => {
   it('should be a constructor', () => {

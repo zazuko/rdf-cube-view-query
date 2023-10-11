@@ -1,12 +1,11 @@
-const { strictEqual } = require('assert')
-const rdfHandler = require('@rdfjs/express-handler')
-const withServer = require('express-as-promise/withServer')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const Cube = require('../lib/Cube')
-const View = require('../lib/View')
-const Source = require('../lib/Source')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import rdfHandler from '@rdfjs/express-handler'
+import withServer from 'express-as-promise/withServer.js'
+import rdf from '@zazuko/env'
+import Cube from '../lib/Cube.js'
+import View from '../lib/View.js'
+import Source from '../lib/Source.js'
+import * as ns from './support/namespaces.js'
 
 describe('Source', () => {
   it('should be a constructor', () => {
@@ -28,7 +27,7 @@ describe('Source', () => {
           called++
 
           res.dataset(rdf.dataset([
-            rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object)
+            rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object),
           ]))
         })
 
@@ -62,15 +61,15 @@ describe('Source', () => {
             res.set('content-type', 'application/sparql-results+json').json({
               results: {
                 bindings: [{
-                  cube: { type: 'uri', value: ns.ex.cube1.value }
+                  cube: { type: 'uri', value: ns.ex.cube1.value },
                 }, {
-                  cube: { type: 'uri', value: ns.ex.cube2.value }
-                }]
-              }
+                  cube: { type: 'uri', value: ns.ex.cube2.value },
+                }],
+              },
             })
           } else {
             res.dataset(rdf.dataset([
-              rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object)
+              rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object),
             ]))
           }
         })
@@ -100,15 +99,15 @@ describe('Source', () => {
             res.set('content-type', 'application/sparql-results+json').json({
               results: {
                 bindings: [{
-                  cube: { type: 'uri', value: ns.ex.cube1.value }
+                  cube: { type: 'uri', value: ns.ex.cube1.value },
                 }, {
-                  cube: { type: 'uri', value: ns.ex.cube2.value }
-                }]
-              }
+                  cube: { type: 'uri', value: ns.ex.cube2.value },
+                }],
+              },
             })
           } else {
             res.dataset(rdf.dataset([
-              rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object)
+              rdf.quad(ns.ex.cube, ns.ex.predicate, ns.ex.object),
             ]))
           }
         })
@@ -159,11 +158,11 @@ describe('Source', () => {
               results: {
                 bindings: [
                   {
-                    cube: { type: 'uri', value: ns.ex.view1.value }
+                    cube: { type: 'uri', value: ns.ex.view1.value },
                   }, {
-                    cube: { type: 'uri', value: ns.ex.view2.value }
-                  }]
-              }
+                    cube: { type: 'uri', value: ns.ex.view2.value },
+                  }],
+              },
             })
           } else {
             res.dataset(rdf.dataset([
@@ -197,11 +196,11 @@ describe('Source', () => {
               results: {
                 bindings: [
                   {
-                    cube: { type: 'uri', value: ns.ex.view1.value }
+                    cube: { type: 'uri', value: ns.ex.view1.value },
                   }, {
-                    cube: { type: 'uri', value: ns.ex.view2.value }
-                  }]
-              }
+                    cube: { type: 'uri', value: ns.ex.view2.value },
+                  }],
+              },
             })
           } else {
             res.dataset(rdf.dataset([
