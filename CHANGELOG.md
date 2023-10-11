@@ -1,5 +1,20 @@
 # rdf-cube-view-query
 
+## 2.0.0
+
+### Major Changes
+
+- 214f094: Renamed filter `in` to `IN` exported from `cubesFilter.js`
+- 214f094: Update package to ESM
+
+### Minor Changes
+
+- 214f094: Replace `rdf-ext` with `@zazuko/env`
+
+### Patch Changes
+
+- 214f094: Remove changesets from dependencies
+
 ## 1.12.0
 
 ### Minor Changes
