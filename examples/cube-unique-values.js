@@ -4,14 +4,9 @@
  */
 
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { CubeSource, Source, View } from '../index.js'
 
-const ns = {
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  schema: namespace('http://schema.org/'),
-}
+const dh = rdf.namespace('http://ns.bergnet.org/dark-horse#')
 
 async function main() {
   const source = new Source({
@@ -30,11 +25,11 @@ async function main() {
   const customView = new View({ parent: cubeSource })
   const dateDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dc.date,
+    path: rdf.ns.dc.date,
   })
   const roomDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.room,
+    path: dh.room,
   })
   customView
     .addDimension(dateDimension) // We are only interested in getting unique values for dates
@@ -46,7 +41,7 @@ async function main() {
   const observations = await customView.observations()
 
   for (const observation of observations) {
-    console.log(observation[ns.dc.date.value].value)
+    console.log(observation[rdf.ns.dc.date.value].value)
   }
 }
 

@@ -1,11 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { CubeSource, Source, View } from '../index.js'
 
-const ns = {
-  energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
-}
+const energyPricing = rdf.namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/')
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -24,14 +20,14 @@ async function main() {
   // now let's create the first dimension
   const periodDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.energyPricing.period,
+    path: energyPricing.period,
   })
 
   // and we add it to the view
   customView.addDimension(periodDimension)
 
   // let's also create a filter for the dimension
-  const periodFilter = periodDimension.filter.gte(rdf.literal('2015', ns.xsd.gYear))
+  const periodFilter = periodDimension.filter.gte(rdf.literal('2015', rdf.ns.xsd.gYear))
 
   // and we add it to the view
   customView.addFilter(periodFilter)
@@ -39,7 +35,7 @@ async function main() {
   // let's create a second dimension
   const municipalityDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.energyPricing.municipality,
+    path: energyPricing.municipality,
   })
 
   // and we add it to the view

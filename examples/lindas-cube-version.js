@@ -1,11 +1,5 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { Cube, Source } from '../index.js'
-
-const ns = {
-  adminTerm: namespace('https://ld.admin.ch/definedTerm/'),
-  schema: namespace('http://schema.org/'),
-}
 
 async function main() {
   const source = new Source({
@@ -22,7 +16,7 @@ async function main() {
 
   for (const cube of cubes) {
     const iri = cube.term.value
-    const label = cube.out(ns.schema.name, { language: ['en', 'de', '*'] })
+    const label = cube.out(rdf.ns.schema.name, { language: ['en', 'de', '*'] })
 
     console.log(`${iri}: ${label}`)
   }

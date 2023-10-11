@@ -1,14 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
-import TermSet from '@rdfjs/term-set'
 import { Source, View } from '../index.js'
 
-const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
-}
+const dh = rdf.namespace('http://ns.bergnet.org/dark-horse#')
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -25,7 +18,7 @@ async function main() {
   // all available cubes are returned as an array and can be searched based on the metadata
   const thermometerCube = cubes.find(cube => {
     // let's look for a cube that contains the string 'Thermometer' in the german name property
-    return cube.out(ns.schema.name, { language: 'de' })
+    return cube.out(rdf.ns.schema.name, { language: 'de' })
       .values
       .some(value => value.includes('Thermometer'))
   })
@@ -38,7 +31,7 @@ async function main() {
   console.log(observations) */
 
   // the term set filled with the selected dimensions simplifies the dimensions filter code
-  const selected = new TermSet([ns.dc.date, ns.dh.temperature])
+  const selected = rdf.termSet([rdf.ns.dc.date, dh.temperature])
 
   // now we can filter the dimensions of the view to the selected dimensions
   const dimensions = thermometerView.dimensions.filter(dimension => {
@@ -53,12 +46,12 @@ async function main() {
     // return dimension.cubeDimensions.some(cubeDimension => cubeDimension.path.equals(ns.dc.date))
 
     // it would be also possible to search for a dimension by datatype like xsd:dateTime
-    return dimension.cubeDimensions.some(cubeDimension => cubeDimension.datatype.equals(ns.xsd.dateTime))
+    return dimension.cubeDimensions.some(cubeDimension => cubeDimension.datatype.equals(rdf.ns.xsd.dateTime))
   })
 
   // the dimension has a .filter property to build filters with the operation given as method name and the value to compare as argument
-  const dateGteFilter = dateDimension.filter.gte(rdf.literal('2019-01-08T12:00:00.017000+00:00', ns.xsd.dateTime))
-  const dateLtFilter = dateDimension.filter.lt(rdf.literal('2019-01-12T12:00:00.017000+00:00', ns.xsd.dateTime))
+  const dateGteFilter = dateDimension.filter.gte(rdf.literal('2019-01-08T12:00:00.017000+00:00', rdf.ns.xsd.dateTime))
+  const dateLtFilter = dateDimension.filter.lt(rdf.literal('2019-01-12T12:00:00.017000+00:00', rdf.ns.xsd.dateTime))
   const filters = [dateGteFilter, dateLtFilter]
 
   // now let's create again a view from a cube, but only with the selected dimensions and built filters
