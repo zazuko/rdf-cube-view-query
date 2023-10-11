@@ -1,12 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { CubeSource, Dimension, Node, Source, View } from '../index.js'
 
-const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
-}
+const dh = rdf.namespace('http://ns.bergnet.org/dark-horse#')
 
 async function main() {
   const dateList = [
@@ -31,13 +26,13 @@ async function main() {
   const dateDimension = new Dimension({
     parent: source,
     source: cubeSource,
-    path: ns.dc.date,
+    path: rdf.ns.dc.date,
   })
 
   const temperatureDimension = new Dimension({
     parent: source,
     source: cubeSource,
-    path: ns.dh.temperature,
+    path: dh.temperature,
   })
 
   console.log(`dataset size before creating the dynamic view: ${source.dataset.size}`)
@@ -51,7 +46,7 @@ async function main() {
     const customView = new View({ parent: scope })
 
     // just like the filter
-    const dateFilter = dateDimension.filter.gte(rdf.literal(date.toISOString(), ns.xsd.dateTime), { parent: scope })
+    const dateFilter = dateDimension.filter.gte(rdf.literal(date.toISOString(), rdf.ns.xsd.dateTime), { parent: scope })
 
     // the view combines the dimensions which are reused with the filter that is created per view
     customView

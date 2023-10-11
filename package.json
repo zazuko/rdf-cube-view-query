@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "lint": "eslint . --ignore-path .gitignore",
+    "lint": "eslint . --ignore-path .gitignore --quiet",
     "test": "c8 --all --exclude examples --exclude test --reporter lcovonly mocha",
     "release": "changeset publish"
   },

@@ -1,10 +1,7 @@
-import namespace from '@rdfjs/namespace'
+import rdf from '@zazuko/env'
 import { LookupSource, Source, View } from '../index.js'
 
-const ns = {
-  energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  schema: namespace('http://schema.org/'),
-}
+const energyPricing = rdf.namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/')
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -25,12 +22,12 @@ async function main() {
 
   const customView = new View({ parent: source })
 
-  const operatorDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.operator })
+  const operatorDimension = tariffsView.dimension({ cubeDimension: energyPricing.operator })
   const operatorLabelDimension = customView.createDimension({
     source: lookup,
-    path: ns.schema.name,
+    path: rdf.ns.schema.name,
     join: operatorDimension,
-    as: ns.energyPricing.operatorLabel,
+    as: energyPricing.operatorLabel,
   })
 
   const operatorLabelLanguageFilter = operatorLabelDimension.filter.lang(['de', 'en', '*'])

@@ -1,11 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { Source, View } from '../index.js'
 
-const ns = {
-  energyPricing: namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/'),
-  schema: namespace('http://schema.org/'),
-}
+const energyPricing = rdf.namespace('https://energy.ld.admin.ch/elcom/electricity-price/dimension/')
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -36,7 +32,7 @@ async function main() {
   const dimensions = tariffsView.dimensions
 
   // let's find the period dimension based on the IRI of the cube dimension
-  const periodDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.period })
+  const periodDimension = tariffsView.dimension({ cubeDimension: energyPricing.period })
 
   // the datatype and ranges are available from the cube dimension
   const periodDatatype = periodDimension.cubeDimensions[0].datatype
@@ -48,7 +44,7 @@ async function main() {
   const periodFilter = periodDimension.filter.gte(rdf.literal(periodMean, periodDatatype))
 
   // let's find the municipality dimension based on the IRI of the cube dimension
-  const municipalityDimension = tariffsView.dimension({ cubeDimension: ns.energyPricing.municipality })
+  const municipalityDimension = tariffsView.dimension({ cubeDimension: energyPricing.municipality })
 
   // the municipality dimension as an option list available in the cube dimension as in property
   const municipalities = municipalityDimension.cubeDimensions[0].in

@@ -1,12 +1,5 @@
-import namespace from '@rdfjs/namespace'
+import rdf from '@zazuko/env'
 import { Source, View } from '../index.js'
-
-const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
-}
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -23,7 +16,7 @@ async function main() {
   // all available cubes are returned as an array and can be searched based on the metadata
   const thermometerCube = cubes.find(cube => {
     // let's look for a cube that contains the string 'Thermometer' in the german name property
-    return cube.out(ns.schema.name, { language: 'de' })
+    return cube.out(rdf.ns.schema.name, { language: 'de' })
       .values
       .some(value => value.includes('Thermometer'))
   })

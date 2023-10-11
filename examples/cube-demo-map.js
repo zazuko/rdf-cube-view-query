@@ -1,13 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
-import TermMap from '@rdfjs/term-map'
 import { CubeSource, LookupSource, Node, Source, View } from '../index.js'
 
-const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/'),
-}
+const dh = rdf.namespace('http://ns.bergnet.org/dark-horse#')
 
 // creates a map with the cube dimension value as the key and the lookup path value as the value
 async function createMap({ cubeFilter, cubePath, cubeSource, lookupFilter, lookupPath, lookupSource } = {}) {
@@ -51,7 +45,7 @@ async function createMap({ cubeFilter, cubePath, cubeSource, lookupFilter, looku
 
   parent.clear()
 
-  return new TermMap(observations.map(observation => {
+  return rdf.termMap(observations.map(observation => {
     return [
       observation.cube,
       observation.lookup,
@@ -77,17 +71,17 @@ async function main() {
   // now let's create the dimensions
   const dateDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dc.date,
+    path: rdf.ns.dc.date,
   })
 
   const temperatureDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.temperature,
+    path: dh.temperature,
   })
 
   const roomDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.room,
+    path: dh.room,
   })
 
   // now let's add all dimensions and filters
@@ -97,10 +91,10 @@ async function main() {
     .addDimension(roomDimension)
 
   const roomLabelMap = await createMap({
-    cubePath: ns.dh.room,
+    cubePath: dh.room,
     cubeSource,
     lookupFilter: d => d.filter.lang(['', 'de', 'en', '*']),
-    lookupPath: ns.schema.name,
+    lookupPath: rdf.ns.schema.name,
   })
 
   // let's fetch the observations
@@ -109,10 +103,10 @@ async function main() {
   // and join the observations with the room lookup map
   for (const observation of observations) {
     const columns = [
-      observation[ns.dc.date.value].value,
-      observation[ns.dh.temperature.value].value,
+      observation[rdf.ns.dc.date.value].value,
+      observation[dh.temperature.value].value,
       // the room dimension is used to lookup the room label
-      roomLabelMap.get(observation[ns.dh.room.value]).value,
+      roomLabelMap.get(observation[dh.room.value]).value,
     ]
 
     console.log(columns.join(','))

@@ -1,10 +1,7 @@
-import namespace from '@rdfjs/namespace'
+import rdf from '@zazuko/env'
 import { Cube, Source } from '../index.js'
 
-const ns = {
-  adminTerm: namespace('https://ld.admin.ch/definedTerm/'),
-  schema: namespace('http://schema.org/'),
-}
+const adminTerm = rdf.namespace('https://ld.admin.ch/definedTerm/')
 
 async function main() {
   const source = new Source({
@@ -15,14 +12,14 @@ async function main() {
   const cubes = await source.cubes({
     filters: [
       Cube.filter.noValidThrough(),
-      Cube.filter.status(ns.adminTerm('CreativeWorkStatus/Draft')),
+      Cube.filter.status(adminTerm('CreativeWorkStatus/Draft')),
     ],
   })
 
   for (const cube of cubes) {
     const iri = cube.term.value
-    const label = cube.out(ns.schema.name, { language: ['en', 'de', '*'] })
-    const versionHistory = cube.in(ns.schema.hasPart).value
+    const label = cube.out(rdf.ns.schema.name, { language: ['en', 'de', '*'] })
+    const versionHistory = cube.in(rdf.ns.schema.hasPart).value
 
     console.log(`${iri}: ${label} (${versionHistory})`)
   }

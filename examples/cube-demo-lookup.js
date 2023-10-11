@@ -1,12 +1,7 @@
 import rdf from '@zazuko/env'
-import namespace from '@rdfjs/namespace'
 import { CubeSource, LookupSource, Source, View } from '../index.js'
 
-const ns = {
-  dc: namespace('http://purl.org/dc/elements/1.1/'),
-  dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/'),
-}
+const dh = rdf.namespace('http://ns.bergnet.org/dark-horse#')
 
 async function main() {
   // a source manages the SPARQL endpoint information + the named graph
@@ -27,23 +22,23 @@ async function main() {
   // now let's create the dimensions
   const dateDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dc.date,
+    path: rdf.ns.dc.date,
   })
 
   const temperatureDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.temperature,
+    path: dh.temperature,
   })
 
   const roomDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.room,
+    path: dh.room,
   })
 
   // lookup dimensions need an addition join property pointing to the dimension used to join this dimension
   const roomLabelDimension = customView.createDimension({
     source: lookupSource,
-    path: ns.schema.name,
+    path: rdf.ns.schema.name,
     join: roomDimension,
   })
 
