@@ -1,18 +1,18 @@
-const { CubeSource, LookupSource, Source, View } = require('..')
-const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
+import rdf from '@zazuko/env'
+import namespace from '@rdfjs/namespace'
+import { CubeSource, LookupSource, Source, View } from '../index.js'
 
 const ns = {
   dc: namespace('http://purl.org/dc/elements/1.1/'),
   dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/')
+  schema: namespace('http://schema.org/'),
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'http://ld.zazuko.com/query',
-    sourceGraph: 'http://ld.zazuko.com/cube-demo'
+    sourceGraph: 'http://ld.zazuko.com/cube-demo',
     // user: '',
     // password: ''
   })
@@ -27,24 +27,24 @@ async function main () {
   // now let's create the dimensions
   const dateDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dc.date
+    path: ns.dc.date,
   })
 
   const temperatureDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.temperature
+    path: ns.dh.temperature,
   })
 
   const roomDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.room
+    path: ns.dh.room,
   })
 
   // lookup dimensions need an addition join property pointing to the dimension used to join this dimension
   const roomLabelDimension = customView.createDimension({
     source: lookupSource,
     path: ns.schema.name,
-    join: roomDimension
+    join: roomDimension,
   })
 
   // it's possible to filter for labels in a specific language using an array as priority list

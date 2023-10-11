@@ -1,10 +1,6 @@
-const { strictEqual } = require('assert')
-const { cleanQuery, queryFromTxt } = require('./utils')
+import { strictEqual } from 'assert'
+import { cleanQuery, queryFromTxt } from './utils.js'
 
-async function compareQuery ({ name, query }) {
+export async function compareQuery({ name, query }) {
   strictEqual(cleanQuery(query), await queryFromTxt(name))
-}
-
-module.exports = {
-  compareQuery
 }

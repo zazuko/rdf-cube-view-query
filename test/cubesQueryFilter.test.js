@@ -1,9 +1,8 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const cubesQuery = require('../lib/query/cubes')
-const cubesFilterQuery = require('../lib/query/cubesFilter')
-const { compareQuery } = require('./support/compareQuery')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import { cubesQuery } from '../lib/query/cubes.js'
+import * as cubesFilterQuery from '../lib/query/cubesFilter.js'
+import { compareQuery } from './support/compareQuery.js'
+import * as ns from './support/namespaces.js'
 
 describe('query/cubesFilter', () => {
   it('should be an object', () => {
@@ -12,7 +11,7 @@ describe('query/cubesFilter', () => {
 
   describe('in', () => {
     it('should be a function', () => {
-      strictEqual(typeof cubesFilterQuery.in, 'function')
+      strictEqual(typeof cubesFilterQuery.IN, 'function')
     })
 
     it('should create a triple pattern an in filter', async () => {
@@ -20,7 +19,7 @@ describe('query/cubesFilter', () => {
       const values = [ns.ex.value1, ns.ex.value2]
 
       const query = cubesQuery({
-        filters: [cubesFilterQuery.in(predicate, values)]
+        filters: [cubesFilterQuery.IN(predicate, values)],
       })
 
       await compareQuery({ name: 'cubesFilterIn', query })
@@ -37,7 +36,7 @@ describe('query/cubesFilter', () => {
       const value = ns.ex.value
 
       const query = cubesQuery({
-        filters: [cubesFilterQuery.notExists(predicate, value)]
+        filters: [cubesFilterQuery.notExists(predicate, value)],
       })
 
       await compareQuery({ name: 'cubesFilterNotExists', query })
@@ -47,7 +46,7 @@ describe('query/cubesFilter', () => {
       const predicate = ns.ex.property
 
       const query = cubesQuery({
-        filters: [cubesFilterQuery.notExists(predicate)]
+        filters: [cubesFilterQuery.notExists(predicate)],
       })
 
       await compareQuery({ name: 'cubesFilterNotExistsNoValue', query })
@@ -63,7 +62,7 @@ describe('query/cubesFilter', () => {
       const predicate = ns.ex.property
 
       const query = cubesQuery({
-        filters: [cubesFilterQuery.patternIn(predicate)]
+        filters: [cubesFilterQuery.patternIn(predicate)],
       })
 
       await compareQuery({ name: 'cubesFilterPatternIn', query })
@@ -74,7 +73,7 @@ describe('query/cubesFilter', () => {
       const subject = ns.ex.subject
 
       const query = cubesQuery({
-        filters: [cubesFilterQuery.patternIn(predicate, subject)]
+        filters: [cubesFilterQuery.patternIn(predicate, subject)],
       })
 
       await compareQuery({ name: 'cubesFilterPatternInSubject', query })

@@ -1,11 +1,11 @@
-const { Parser } = require('n3')
-const rdf = require('rdf-ext')
-const { ViewBuilder } = require('../lib/builders.js')
-const { Source } = require('../index.js')
+import { Parser } from 'n3'
+import rdf from '@zazuko/env'
+import { ViewBuilder } from '../lib/builders.js'
+import { Source } from '../index.js'
 
-async function main () {
+async function main() {
   const source = new Source({
-    endpointUrl: 'https://ld.integ.stadt-zuerich.ch/query'
+    endpointUrl: 'https://ld.integ.stadt-zuerich.ch/query',
   })
 
   const { dataset, term } = getSampleData()
@@ -38,7 +38,7 @@ async function main () {
   }
 }
 
-function getSampleData () {
+function getSampleData() {
   const viewTTL = `
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .

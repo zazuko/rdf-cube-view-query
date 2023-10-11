@@ -1,9 +1,9 @@
-const Cube = require('../../lib/Cube')
-const Source = require('../../lib/Source')
-const buildCubeDimension = require('./buildCubeDimension')
-const ns = require('./namespaces')
+import Cube from '../../lib/Cube.js'
+import Source from '../../lib/Source.js'
+import buildCubeDimension from './buildCubeDimension.js'
+import * as ns from './namespaces.js'
 
-function buildCube ({ endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
+export function buildCube({ endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
   const source = new Source({ endpointUrl })
   const cube = new Cube({ parent: source, source })
 
@@ -25,5 +25,3 @@ function buildCube ({ endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
 
   return cube
 }
-
-module.exports = buildCube

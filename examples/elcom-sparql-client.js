@@ -1,7 +1,7 @@
-const { Source } = require('..')
+import { Source } from '../index.js'
 
 // regex based search query for municipalities and providers
-function searchQuery (search, { limit = 100 } = {}) {
+function searchQuery(search, { limit = 100 } = {}) {
   return `
 PREFIX schema: <http://schema.org/>
 PREFIX lac: <https://schema.ld.admin.ch/>
@@ -43,11 +43,11 @@ LIMIT ${limit}
 `
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'https://test.lindas.admin.ch/query',
-    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice'
+    sourceGraph: 'https://lindas.admin.ch/elcom/electricityprice',
     // user: '',
     // password: ''
   })

@@ -1,23 +1,23 @@
-const { CubeSource, LookupSource, Node, Source, View } = require('..')
-const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
-const TermMap = require('@rdfjs/term-map')
+import rdf from '@zazuko/env'
+import namespace from '@rdfjs/namespace'
+import TermMap from '@rdfjs/term-map'
+import { CubeSource, LookupSource, Node, Source, View } from '../index.js'
 
 const ns = {
   dc: namespace('http://purl.org/dc/elements/1.1/'),
   dh: namespace('http://ns.bergnet.org/dark-horse#'),
-  schema: namespace('http://schema.org/')
+  schema: namespace('http://schema.org/'),
 }
 
 // creates a map with the cube dimension value as the key and the lookup path value as the value
-async function createMap ({ cubeFilter, cubePath, cubeSource, lookupFilter, lookupPath, lookupSource } = {}) {
+async function createMap({ cubeFilter, cubePath, cubeSource, lookupFilter, lookupPath, lookupSource } = {}) {
   const parent = new Node({ parent: cubeSource })
   const view = new View({ parent })
 
   const cubeDimension = view.createDimension({
     source: cubeSource,
     path: cubePath,
-    as: 'cube'
+    as: 'cube',
   })
 
   view.addDimension(cubeDimension)
@@ -34,7 +34,7 @@ async function createMap ({ cubeFilter, cubePath, cubeSource, lookupFilter, look
     source: lookupSource || LookupSource.fromSource(cubeSource, { parent }),
     path: lookupPath,
     join: cubeDimension,
-    as: 'lookup'
+    as: 'lookup',
   })
 
   view.addDimension(lookupDimension)
@@ -54,16 +54,16 @@ async function createMap ({ cubeFilter, cubePath, cubeSource, lookupFilter, look
   return new TermMap(observations.map(observation => {
     return [
       observation.cube,
-      observation.lookup
+      observation.lookup,
     ]
   }))
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'http://ld.zazuko.com/query',
-    sourceGraph: 'http://ld.zazuko.com/cube-demo'
+    sourceGraph: 'http://ld.zazuko.com/cube-demo',
     // user: '',
     // password: ''
   })
@@ -77,17 +77,17 @@ async function main () {
   // now let's create the dimensions
   const dateDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dc.date
+    path: ns.dc.date,
   })
 
   const temperatureDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.temperature
+    path: ns.dh.temperature,
   })
 
   const roomDimension = customView.createDimension({
     source: cubeSource,
-    path: ns.dh.room
+    path: ns.dh.room,
   })
 
   // now let's add all dimensions and filters
@@ -100,7 +100,7 @@ async function main () {
     cubePath: ns.dh.room,
     cubeSource,
     lookupFilter: d => d.filter.lang(['', 'de', 'en', '*']),
-    lookupPath: ns.schema.name
+    lookupPath: ns.schema.name,
   })
 
   // let's fetch the observations
@@ -112,7 +112,7 @@ async function main () {
       observation[ns.dc.date.value].value,
       observation[ns.dh.temperature.value].value,
       // the room dimension is used to lookup the room label
-      roomLabelMap.get(observation[ns.dh.room.value]).value
+      roomLabelMap.get(observation[ns.dh.room.value]).value,
     ]
 
     console.log(columns.join(','))

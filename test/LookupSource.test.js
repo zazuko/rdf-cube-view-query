@@ -1,8 +1,7 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-const LookupSource = require('../lib/LookupSource')
-const ns = require('./support/namespaces')
-const Source = require('../lib/Source.js')
+import { strictEqual } from 'assert'
+import LookupSource from '../lib/LookupSource.js'
+import Source from '../lib/Source.js'
+import * as ns from './support/namespaces.js'
 
 describe('LookupSource', () => {
   it('should be a constructor', () => {

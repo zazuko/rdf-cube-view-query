@@ -1,15 +1,14 @@
-const { strictEqual } = require('assert')
-const rdfHandler = require('@rdfjs/express-handler')
-const withServer = require('express-as-promise/withServer')
-const upperFirst = require('lodash/upperFirst')
-const { describe, it } = require('mocha')
-const rdf = require('rdf-ext')
-const cubesQuery = require('../lib/query/cubes')
-const Cube = require('../lib/Cube')
-const Source = require('../lib/Source')
-const buildCube = require('./support/buildCube')
-const { compareQuery } = require('./support/compareQuery')
-const ns = require('./support/namespaces')
+import { strictEqual } from 'assert'
+import rdfHandler from '@rdfjs/express-handler'
+import withServer from 'express-as-promise/withServer.js'
+import upperFirst from 'lodash/upperFirst.js'
+import rdf from '@zazuko/env'
+import { cubesQuery } from '../lib/query/cubes.js'
+import Cube from '../lib/Cube.js'
+import Source from '../lib/Source.js'
+import { buildCube } from './support/buildCube.js'
+import { compareQuery } from './support/compareQuery.js'
+import * as ns from './support/namespaces.js'
 
 describe('Cube', () => {
   it('should be a constructor', () => {
@@ -26,10 +25,10 @@ describe('Cube', () => {
     it('should contain all dimensions of the cube without rdf:type', () => {
       const cube = buildCube({
         dimensions: [{
-          path: ns.ex.propertyA
+          path: ns.ex.propertyA,
         }, {
-          path: ns.ex.propertyB
-        }]
+          path: ns.ex.propertyB,
+        }],
       })
 
       const dimensions = cube.dimensions
@@ -171,7 +170,7 @@ describe('Cube', () => {
       it('should create a patter in filter for schema:hasPart', async () => {
         const versionHistory = ns.ex.versionHistory
         const query = cubesQuery({
-          filters: [Cube.filter.isPartOf(versionHistory)]
+          filters: [Cube.filter.isPartOf(versionHistory)],
         })
 
         await compareQuery({ name: 'CubeFilterIsPartOf', query })
@@ -185,7 +184,7 @@ describe('Cube', () => {
 
       it('should create a not exists filter for schema:expires', async () => {
         const query = cubesQuery({
-          filters: [Cube.filter.noExpires()]
+          filters: [Cube.filter.noExpires()],
         })
 
         await compareQuery({ name: 'CubeFilterNoExpires', query })
@@ -199,7 +198,7 @@ describe('Cube', () => {
 
       it('should create a not exists filter for schema:validThrough', async () => {
         const query = cubesQuery({
-          filters: [Cube.filter.noValidThrough()]
+          filters: [Cube.filter.noValidThrough()],
         })
 
         await compareQuery({ name: 'CubeFilterNoValidThrough', query })
@@ -213,7 +212,7 @@ describe('Cube', () => {
 
       it('should create an in filter for the given status value', async () => {
         const query = cubesQuery({
-          filters: [Cube.filter.status(ns.ex.status)]
+          filters: [Cube.filter.status(ns.ex.status)],
         })
 
         await compareQuery({ name: 'CubeFilterStatusValue', query })
@@ -221,7 +220,7 @@ describe('Cube', () => {
 
       it('should create an in filter for the given status values', async () => {
         const query = cubesQuery({
-          filters: [Cube.filter.status([ns.ex.status1, ns.ex.status2])]
+          filters: [Cube.filter.status([ns.ex.status1, ns.ex.status2])],
         })
 
         await compareQuery({ name: 'CubeFilterStatusValues', query })
@@ -235,7 +234,7 @@ describe('Cube', () => {
 
       it('should create an eq filter for the given version', async () => {
         const query = cubesQuery({
-          filters: [Cube.filter.version('2')]
+          filters: [Cube.filter.version('2')],
         })
 
         await compareQuery({ name: 'CubeFilterVersionEq', query })
@@ -251,7 +250,7 @@ describe('Cube', () => {
 
           it(`should create an ${operation} filter for the given version`, async () => {
             const query = cubesQuery({
-              filters: [Cube.filter.version[operation]('2')]
+              filters: [Cube.filter.version[operation]('2')],
             })
 
             await compareQuery({ name: `CubeFilterVersion${upperFirst(operation)}`, query })

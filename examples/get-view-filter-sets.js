@@ -1,8 +1,8 @@
-const { Parser } = require('n3')
-const rdf = require('rdf-ext')
-const { ViewBuilder } = require('../lib/builders.js')
+import { Parser } from 'n3'
+import rdf from '@zazuko/env'
+import { ViewBuilder } from '../lib/builders.js'
 
-async function main () {
+async function main() {
   const { dataset, term } = getSampleData()
   const { view } = ViewBuilder.fromDataset({ dataset, term })
 
@@ -25,7 +25,7 @@ async function main () {
   }
 }
 
-function getSampleData () {
+function getSampleData() {
   const viewTTL = `
 <https://example.org/view> a <https://cube.link/view/View> ;
 \t<https://cube.link/view/dimension> [

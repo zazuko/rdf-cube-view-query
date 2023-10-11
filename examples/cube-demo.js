@@ -1,20 +1,20 @@
-const { Source, View } = require('..')
-const rdf = require('rdf-ext')
-const namespace = require('@rdfjs/namespace')
-const TermSet = require('@rdfjs/term-set')
+import rdf from '@zazuko/env'
+import namespace from '@rdfjs/namespace'
+import TermSet from '@rdfjs/term-set'
+import { Source, View } from '../index.js'
 
 const ns = {
   dc: namespace('http://purl.org/dc/elements/1.1/'),
   dh: namespace('http://ns.bergnet.org/dark-horse#'),
   schema: namespace('http://schema.org/'),
-  xsd: namespace('http://www.w3.org/2001/XMLSchema#')
+  xsd: namespace('http://www.w3.org/2001/XMLSchema#'),
 }
 
-async function main () {
+async function main() {
   // a source manages the SPARQL endpoint information + the named graph
   const source = new Source({
     endpointUrl: 'http://ld.zazuko.com/query',
-    sourceGraph: 'http://ld.zazuko.com/cube-demo'
+    sourceGraph: 'http://ld.zazuko.com/cube-demo',
     // user: '',
     // password: ''
   })

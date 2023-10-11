@@ -1,9 +1,7 @@
-const { strictEqual } = require('assert')
-const { describe, it } = require('mocha')
-
-const ns = require('../support/namespaces')
-const Dimensions = require('../../lib/query/ViewQuery/Dimensions.js')
-const { parse } = require('../support/utils')
+import { strictEqual } from 'assert'
+import * as ns from '../support/namespaces.js'
+import Dimensions from '../../lib/query/ViewQuery/Dimensions.js'
+import { parse } from '../support/utils.js'
 
 describe('Dimensions', () => {
   it('gets the property from view:as', () => {
