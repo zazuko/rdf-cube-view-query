@@ -1,4 +1,5 @@
 import { strictEqual } from 'assert'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import LookupSource from '../lib/LookupSource.js'
 import Source from '../lib/Source.js'
 import * as ns from './support/namespaces.js'
@@ -14,7 +15,8 @@ describe('LookupSource', () => {
     })
 
     it('should maintain queryPrefix', async () => {
-      const source = new Source({ endpointUrl: ns.ex.endpointUrl, queryPrefix: 'Some prefix' })
+      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client, queryPrefix: 'Some prefix' })
 
       const lookupSource = LookupSource.fromSource(source)
 

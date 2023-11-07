@@ -2,6 +2,7 @@ import { strictEqual } from 'assert'
 import rdfHandler from '@rdfjs/express-handler'
 import withServer from 'express-as-promise/withServer.js'
 import rdf from '@zazuko/env'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import Cube from '../lib/Cube.js'
 import View from '../lib/View.js'
 import Source from '../lib/Source.js'
@@ -31,7 +32,8 @@ describe('Source', () => {
           ]))
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
 
         const result = await source.cube(ns.ex.cube)
 
@@ -74,7 +76,8 @@ describe('Source', () => {
           }
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
 
         const result = await source.cubes()
 
@@ -112,7 +115,8 @@ describe('Source', () => {
           }
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
 
         await source.cubes({ noShape: true })
 
@@ -129,7 +133,8 @@ describe('Source', () => {
     })
 
     it('should return a select query', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
 
       const result = source.cubesQuery()
 
@@ -170,7 +175,8 @@ describe('Source', () => {
           }
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
 
         const result = await source.views()
 
@@ -208,7 +214,8 @@ describe('Source', () => {
           }
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
 
         await source.views({ noShape: true })
 
@@ -225,7 +232,8 @@ describe('Source', () => {
     })
 
     it('should return a select query', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
 
       const result = source.viewListQuery()
 

@@ -1,4 +1,5 @@
 import { strictEqual } from 'assert'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import CubeSource from '../lib/CubeSource.js'
 import Source from '../lib/Source.js'
 import * as ns from './support/namespaces.js'
@@ -14,7 +15,8 @@ describe('CubeSource', () => {
     })
 
     it('should maintain queryPrefix', async () => {
-      const source = new Source({ endpointUrl: ns.ex.endpointUrl, queryPrefix: 'Some prefix' })
+      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client, queryPrefix: 'Some prefix' })
 
       const cubeSource = CubeSource.fromSource(source, ns.ex.cube)
 

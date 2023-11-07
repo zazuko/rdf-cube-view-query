@@ -3,6 +3,7 @@ import rdfHandler from '@rdfjs/express-handler'
 import withServer from 'express-as-promise/withServer.js'
 import upperFirst from 'lodash/upperFirst.js'
 import rdf from '@zazuko/env'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import { cubesQuery } from '../lib/query/cubes.js'
 import Cube from '../lib/Cube.js'
 import Source from '../lib/Source.js'
@@ -11,6 +12,8 @@ import { compareQuery } from './support/compareQuery.js'
 import * as ns from './support/namespaces.js'
 
 describe('Cube', () => {
+  const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+
   it('should be a constructor', () => {
     strictEqual(typeof Cube, 'function')
   })
@@ -262,14 +265,14 @@ describe('Cube', () => {
 
   describe('in', () => {
     it('should be a method', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       strictEqual(typeof cube.in, 'function')
     })
 
     it('should use clownface to search for triples pointing to the cube', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       cube.ptr
@@ -282,14 +285,14 @@ describe('Cube', () => {
 
   describe('out', () => {
     it('should be a method', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       strictEqual(typeof cube.out, 'function')
     })
 
     it('should use clownface to search for triples starting at the cube', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       cube.ptr
