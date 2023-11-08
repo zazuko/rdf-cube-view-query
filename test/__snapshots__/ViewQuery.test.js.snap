@@ -1,0 +1,198 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query/ViewQuery should generate LIMIT and OFFSET with the values given in projection/orderBy 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+}
+GROUP BY ?dimension0 ?dimension1
+OFFSET 100
+LIMIT 50"
+`;
+
+exports[`query/ViewQuery should generate ORDER BY in the direction given in projection/orderBy 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+}
+GROUP BY ?dimension0 ?dimension1
+ORDER BY DESC (?dimension0) (?dimension1)"
+`;
+
+exports[`query/ViewQuery should generate a Stardog text search filter 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/location> ?dimension0.
+  ?dimension0 <http://schema.org/name> ?dimension1.
+  SERVICE <tag:stardog:api:search:textMatch> {
+    _:g_0 <tag:stardog:api:search:query> \\"search\\";
+      <tag:stardog:api:search:threshold> \\"1.0\\"^^<http://www.w3.org/2001/XMLSchema#decimal>;
+      <tag:stardog:api:search:result> ?dimension1.
+  }
+}
+GROUP BY ?dimension0 ?dimension1"
+`;
+
+exports[`query/ViewQuery should generate a count query 1`] = `
+"SELECT (COUNT(*) AS ?count) WHERE {
+  {
+    SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+      <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+      ?observationSet0 <https://cube.link/observation> ?source0.
+      ?source0 <http://schema.org/dateCreated> ?dimension0;
+        <http://schema.org/location> ?dimension1.
+    }
+    GROUP BY ?dimension0 ?dimension1
+  }
+}"
+`;
+
+exports[`query/ViewQuery should generate a count query without LIMIT and OFFSET 1`] = `
+"SELECT (COUNT(*) AS ?count) WHERE {
+  {
+    SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+      <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+      ?observationSet0 <https://cube.link/observation> ?source0.
+      ?source0 <http://schema.org/dateCreated> ?dimension0;
+        <http://schema.org/location> ?dimension1.
+    }
+    GROUP BY ?dimension0 ?dimension1
+  }
+}"
+`;
+
+exports[`query/ViewQuery should generate a day function filter 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+  FILTER((DAY(?dimension2)) >= \\"10\\")
+}
+GROUP BY ?dimension0 ?dimension1"
+`;
+
+exports[`query/ViewQuery should generate a language filter 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/location> ?dimension0.
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension1_0.
+    FILTER(LANGMATCHES(LANG(?dimension1_0), \\"de\\"))
+  }
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension1_1.
+    FILTER(LANGMATCHES(LANG(?dimension1_1), \\"en\\"))
+  }
+  OPTIONAL {
+    {
+      SELECT (MIN(?dimension1_2) AS ?dimension1_2) WHERE {
+        ?dimension0 <http://schema.org/name> ?dimension1_2.
+        FILTER(LANGMATCHES(LANG(?dimension1_2), \\"*\\"))
+      }
+    }
+  }
+  BIND(COALESCE(?dimension1_0, ?dimension1_1, ?dimension1_2) AS ?dimension1)
+}
+GROUP BY ?dimension0 ?dimension1"
+`;
+
+exports[`query/ViewQuery should generate a language filter with aggregate 1`] = `
+"SELECT DISTINCT ?dimension0 (MIN(?dimension1) AS ?dimension1) WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/location> ?dimension0.
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension1_0.
+    FILTER(LANGMATCHES(LANG(?dimension1_0), \\"de\\"))
+  }
+  OPTIONAL {
+    ?dimension0 <http://schema.org/name> ?dimension1_1.
+    FILTER(LANGMATCHES(LANG(?dimension1_1), \\"en\\"))
+  }
+  OPTIONAL {
+    {
+      SELECT (MIN(?dimension1_2) AS ?dimension1_2) WHERE {
+        ?dimension0 <http://schema.org/name> ?dimension1_2.
+        FILTER(LANGMATCHES(LANG(?dimension1_2), \\"*\\"))
+      }
+    }
+  }
+  BIND(COALESCE(?dimension1_0, ?dimension1_1, ?dimension1_2) AS ?dimension1)
+}
+GROUP BY ?dimension0"
+`;
+
+exports[`query/ViewQuery should generate a month function filter 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+  FILTER((MONTH(?dimension2)) >= \\"10\\")
+}
+GROUP BY ?dimension0 ?dimension1"
+`;
+
+exports[`query/ViewQuery should generate a query with the given columns in the result set 1`] = `
+"SELECT DISTINCT ?dimension1 ?dimension2 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/name> ?dimension1;
+    <http://schema.org/location> ?dimension2.
+}
+GROUP BY ?dimension1 ?dimension2"
+`;
+
+exports[`query/ViewQuery should generate a query without distinct if disableDistinct is true 1`] = `
+"SELECT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+}"
+`;
+
+exports[`query/ViewQuery should generate a year function filter 1`] = `
+"SELECT DISTINCT ?dimension0 ?dimension1 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source0.
+  ?source0 <http://schema.org/dateCreated> ?dimension0;
+    <http://schema.org/location> ?dimension1.
+  FILTER((YEAR(?dimension2)) >= \\"1999\\")
+}
+GROUP BY ?dimension0 ?dimension1"
+`;
+
+exports[`query/ViewQuery should generate only generate query with projected columns 1`] = `
+"SELECT DISTINCT ?dimension0 WHERE {
+  <http://example.org/sensor/cube> <https://cube.link/observationSet> ?observationSet0.
+  ?observationSet0 <https://cube.link/observation> ?source1.
+  ?source1 <http://schema.org/location> ?dimension1.
+  OPTIONAL {
+    ?dimension1 <http://schema.org/name> ?dimension0_0.
+    FILTER(LANGMATCHES(LANG(?dimension0_0), \\"de\\"))
+  }
+  OPTIONAL {
+    ?dimension1 <http://schema.org/name> ?dimension0_1.
+    FILTER(LANGMATCHES(LANG(?dimension0_1), \\"en\\"))
+  }
+  OPTIONAL {
+    {
+      SELECT (MIN(?dimension0_2) AS ?dimension0_2) WHERE {
+        ?dimension1 <http://schema.org/name> ?dimension0_2.
+        FILTER(LANGMATCHES(LANG(?dimension0_2), \\"*\\"))
+      }
+    }
+  }
+  BIND(COALESCE(?dimension0_0, ?dimension0_1, ?dimension0_2) AS ?dimension0)
+}
+GROUP BY ?dimension0"
+`;

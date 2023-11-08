@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query/cube should create a DESCRIBE query for the cube and the version history 1`] = `
+"DESCRIBE ?subject WHERE {
+  { BIND(<http://example.org/cube> AS ?subject) }
+  UNION
+  { ?subject <http://schema.org/hasPart> <http://example.org/cube>. }
+}"
+`;
+
+exports[`query/cube should use the given named graph 1`] = `
+"DESCRIBE ?subject FROM <http://example.org/graph>
+WHERE {
+  { BIND(<http://example.org/cube> AS ?subject) }
+  UNION
+  { ?subject <http://schema.org/hasPart> <http://example.org/cube>. }
+}"
+`;

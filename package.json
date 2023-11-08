@@ -31,11 +31,13 @@
     "@rdfjs/express-handler": "^1.2.2",
     "@tpluscode/eslint-config": "^0.4.4",
     "c8": "^7.13.0",
+    "chai": "^4.3.10",
     "express-as-promise": "^1.2.0",
-    "lodash": "^4.17.21",
     "mocha": "^10.2.0",
+    "mocha-chai-jest-snapshot": "^1.1.4",
     "n3": "^1.16.3",
     "rdf-utils-fs": "^2.1.0",
+    "sparqljs": "^3.7.1",
     "standard": "^14.3.4"
   }
 }

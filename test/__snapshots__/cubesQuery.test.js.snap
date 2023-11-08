@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query/cubes should create a query that finds all cube:Cube terms 1`] = `"SELECT ?cube WHERE { ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>. }"`;
+
+exports[`query/cubes should use the given named graph 1`] = `
+"SELECT ?cube FROM <http://example.org/graph>
+WHERE { ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>. }"
+`;
+
+exports[`query/cubes should use the result of the filter functions 1`] = `"SELECT ?cube WHERE { ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>. }"`;
