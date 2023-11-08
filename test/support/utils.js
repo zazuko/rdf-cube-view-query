@@ -1,20 +1,14 @@
-import { readFile } from 'fs/promises'
 import { Parser } from 'n3'
 import rdf from '@zazuko/env'
 import { turtle } from '@tpluscode/rdf-string'
+import sparqljs from 'sparqljs'
+
+const generator = new sparqljs.Generator()
+const sparqlParser = new sparqljs.Parser()
 
 export function cleanQuery(query) {
-  return query
-    .replace(/\n/g, ' ')
-    .replace(/ +/g, ' ')
-    .trim()
-}
-
-export async function queryFromTxt(name) {
-  const filename = `test/support/${name}.query.txt`
-  const content = await readFile(filename)
-
-  return cleanQuery(content.toString())
+  const parsedQuery = sparqlParser.parse(query)
+  return generator.stringify(parsedQuery)
 }
 
 const parser = new Parser()
