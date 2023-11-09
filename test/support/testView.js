@@ -31,3 +31,6 @@ chai.Assertion.addProperty('query', function () {
 chai.Assertion.addProperty('countQuery', function () {
   return new chai.Assertion(cleanQuery(this._obj.countQuery.toString()))
 })
+chai.Assertion.addProperty('previewQuery', function () {
+  return (arg) => new chai.Assertion(cleanQuery(this._obj.previewQuery(arg).toString()))
+})

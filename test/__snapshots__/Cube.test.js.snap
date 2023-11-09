@@ -92,3 +92,17 @@ exports[`Cube filter version should create an eq filter for the given version 1`
   FILTER(?v0 = 2 )
 }"
 `;
+
+exports[`Cube previewQuery creates a view query from the given cube 1`] = `
+"SELECT ?dimension0 ?dimension1 WHERE {
+  {
+    SELECT ?source0 WHERE {
+      <http://example.org/cube> <https://cube.link/observationSet> ?observationSet0.
+      ?observationSet0 <https://cube.link/observation> ?source0.
+    }
+    LIMIT 10
+  }
+  ?source0 <http://example.org/propertyA> ?dimension0;
+    <http://example.org/propertyB> ?dimension1.
+}"
+`;
