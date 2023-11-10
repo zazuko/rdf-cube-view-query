@@ -1,25 +1,24 @@
-import { strictEqual } from 'assert'
+import chai, { expect } from 'chai'
+import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { cubeQuery } from '../lib/query/cube.js'
 import * as ns from './support/namespaces.js'
-import { compareQuery } from './support/compareQuery.js'
+import { cleanQuery } from './support/utils.js'
 
 describe('query/cube', () => {
-  it('should be a function', () => {
-    strictEqual(typeof cubeQuery, 'function')
-  })
+  chai.use(jestSnapshotPlugin())
 
-  it('should create a DESCRIBE query for the cube and the version history', async () => {
+  it('should create a DESCRIBE query for the cube and the version history', () => {
     const cube = ns.ex.cube
     const query = cubeQuery({ cube })
 
-    await compareQuery({ name: 'cube', query })
+    expect(cleanQuery(query)).toMatchSnapshot()
   })
 
-  it('should use the given named graph', async () => {
+  it('should use the given named graph', () => {
     const cube = ns.ex.cube
     const graph = ns.ex.graph
     const query = cubeQuery({ cube, graph })
 
-    await compareQuery({ name: 'cubeGraph', query })
+    expect(cleanQuery(query)).toMatchSnapshot()
   })
 })

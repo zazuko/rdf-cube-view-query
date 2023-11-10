@@ -1,17 +1,20 @@
 import { strictEqual } from 'assert'
 import rdfHandler from '@rdfjs/express-handler'
 import withServer from 'express-as-promise/withServer.js'
-import upperFirst from 'lodash/upperFirst.js'
 import rdf from '@zazuko/env'
 import ParsingClient from 'sparql-http-client/ParsingClient.js'
+import chai, { expect } from 'chai'
+import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { cubesQuery } from '../lib/query/cubes.js'
 import Cube from '../lib/Cube.js'
 import Source from '../lib/Source.js'
+import { View } from '../index.js'
 import { buildCube } from './support/buildCube.js'
-import { compareQuery } from './support/compareQuery.js'
 import * as ns from './support/namespaces.js'
+import { cleanQuery } from './support/utils.js'
 
 describe('Cube', () => {
+  chai.use(jestSnapshotPlugin())
   const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
 
   it('should be a constructor', () => {
@@ -176,7 +179,7 @@ describe('Cube', () => {
           filters: [Cube.filter.isPartOf(versionHistory)],
         })
 
-        await compareQuery({ name: 'CubeFilterIsPartOf', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
     })
 
@@ -190,7 +193,7 @@ describe('Cube', () => {
           filters: [Cube.filter.noExpires()],
         })
 
-        await compareQuery({ name: 'CubeFilterNoExpires', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
     })
 
@@ -204,7 +207,7 @@ describe('Cube', () => {
           filters: [Cube.filter.noValidThrough()],
         })
 
-        await compareQuery({ name: 'CubeFilterNoValidThrough', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
     })
 
@@ -218,7 +221,7 @@ describe('Cube', () => {
           filters: [Cube.filter.status(ns.ex.status)],
         })
 
-        await compareQuery({ name: 'CubeFilterStatusValue', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
 
       it('should create an in filter for the given status values', async () => {
@@ -226,7 +229,7 @@ describe('Cube', () => {
           filters: [Cube.filter.status([ns.ex.status1, ns.ex.status2])],
         })
 
-        await compareQuery({ name: 'CubeFilterStatusValues', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
     })
 
@@ -240,7 +243,7 @@ describe('Cube', () => {
           filters: [Cube.filter.version('2')],
         })
 
-        await compareQuery({ name: 'CubeFilterVersionEq', query })
+        expect(cleanQuery(query)).toMatchSnapshot()
       })
 
       const operations = ['eq', 'ne', 'lt', 'gt', 'lte', 'gte']
@@ -256,7 +259,7 @@ describe('Cube', () => {
               filters: [Cube.filter.version[operation]('2')],
             })
 
-            await compareQuery({ name: `CubeFilterVersion${upperFirst(operation)}`, query })
+            expect(cleanQuery(query)).toMatchSnapshot()
           })
         })
       }
@@ -300,6 +303,27 @@ describe('Cube', () => {
         .addOut(ns.ex.predicate, ns.ex.down)
 
       strictEqual(ns.ex.down.equals(cube.out(ns.ex.predicate).term), true)
+    })
+  })
+
+  describe('previewQuery', () => {
+    it('creates a view query from the given cube', () => {
+      // given
+      const cube = buildCube({
+        term: ns.ex.cube,
+        endpointUrl: ns.ex.endpoint,
+        dimensions: [{
+          path: ns.ex.propertyA,
+        }, {
+          path: ns.ex.propertyB,
+        }],
+      })
+
+      // when
+      const query = View.fromCube(cube).observationsQuery().previewQuery()
+
+      // then
+      expect(cleanQuery(query.toString())).toMatchSnapshot()
     })
   })
 })

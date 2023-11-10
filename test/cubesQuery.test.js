@@ -1,28 +1,32 @@
 import { deepStrictEqual, strictEqual } from 'assert'
+import chai, { expect } from 'chai'
+import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { cubesQuery } from '../lib/query/cubes.js'
-import { compareQuery } from './support/compareQuery.js'
 import * as ns from './support/namespaces.js'
+import { cleanQuery } from './support/utils.js'
 
 describe('query/cubes', () => {
+  chai.use(jestSnapshotPlugin())
+
   it('should be a function', () => {
     strictEqual(typeof cubesQuery, 'function')
   })
 
-  it('should create a query that finds all cube:Cube terms', async () => {
+  it('should create a query that finds all cube:Cube terms', () => {
     const query = cubesQuery()
 
-    await compareQuery({ name: 'cubes', query })
+    expect(cleanQuery(query)).toMatchSnapshot()
   })
 
-  it('should use the given named graph', async () => {
+  it('should use the given named graph', () => {
     const graph = ns.ex.graph
 
     const query = cubesQuery({ graph })
 
-    await compareQuery({ name: 'cubesGraph', query })
+    expect(cleanQuery(query)).toMatchSnapshot()
   })
 
-  it('should call the filters functions', async () => {
+  it('should call the filters functions', () => {
     const args = []
 
     const filter = name => {
@@ -41,7 +45,7 @@ describe('query/cubes', () => {
     ])
   })
 
-  it('should use the result of the filter functions', async () => {
+  it('should use the result of the filter functions', () => {
     const filter = name => {
       return ({ index }) => {
         return [`# ${name} ${index}`]
@@ -50,6 +54,6 @@ describe('query/cubes', () => {
 
     const query = cubesQuery({ filters: [filter('1'), filter('2')] })
 
-    await compareQuery({ name: 'cubesFilter', query })
+    expect(cleanQuery(query)).toMatchSnapshot()
   })
 })

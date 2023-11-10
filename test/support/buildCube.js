@@ -3,9 +3,9 @@ import Source from '../../lib/Source.js'
 import buildCubeDimension from './buildCubeDimension.js'
 import * as ns from './namespaces.js'
 
-export function buildCube({ endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
+export function buildCube({ term, endpointUrl = ns.ex.endpoint, dimensions = [] } = {}) {
   const source = new Source({ endpointUrl })
-  const cube = new Cube({ parent: source, source })
+  const cube = new Cube({ term, parent: source, source })
 
   cube.ptr
     .addOut(ns.rdf.type, ns.cube.Cube)

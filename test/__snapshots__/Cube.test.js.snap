@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cube filter isPartOf should create a patter in filter for schema:hasPart 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>.
+  <http://example.org/versionHistory> <http://schema.org/hasPart> ?cube.
+}"
+`;
+
+exports[`Cube filter noExpires should create a not exists filter for schema:expires 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>.
+  FILTER(NOT EXISTS { ?cube <http://schema.org/expires> ?v0. })
+}"
+`;
+
+exports[`Cube filter noValidThrough should create a not exists filter for schema:validThrough 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>.
+  FILTER(NOT EXISTS { ?cube <http://schema.org/validThrough> ?v0. })
+}"
+`;
+
+exports[`Cube filter status should create an in filter for the given status value 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/creativeWorkStatus> ?v0.
+  FILTER(?v0 IN(<http://example.org/status>))
+}"
+`;
+
+exports[`Cube filter status should create an in filter for the given status values 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/creativeWorkStatus> ?v0.
+  FILTER(?v0 IN(<http://example.org/status1>, <http://example.org/status2>))
+}"
+`;
+
+exports[`Cube filter version eq should create an eq filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 = 2 )
+}"
+`;
+
+exports[`Cube filter version gt should create an gt filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 > 2 )
+}"
+`;
+
+exports[`Cube filter version gte should create an gte filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 >= 2 )
+}"
+`;
+
+exports[`Cube filter version lt should create an lt filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 < 2 )
+}"
+`;
+
+exports[`Cube filter version lte should create an lte filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 <= 2 )
+}"
+`;
+
+exports[`Cube filter version ne should create an ne filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 != 2 )
+}"
+`;
+
+exports[`Cube filter version should create an eq filter for the given version 1`] = `
+"SELECT ?cube WHERE {
+  ?cube <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://cube.link/Cube>;
+    <http://schema.org/version> ?v0.
+  FILTER(?v0 = 2 )
+}"
+`;
+
+exports[`Cube previewQuery creates a view query from the given cube 1`] = `
+"SELECT ?dimension0 ?dimension1 WHERE {
+  {
+    SELECT ?source0 WHERE {
+      <http://example.org/cube> <https://cube.link/observationSet> ?observationSet0.
+      ?observationSet0 <https://cube.link/observation> ?source0.
+    }
+    LIMIT 10
+  }
+  ?source0 <http://example.org/propertyA> ?dimension0;
+    <http://example.org/propertyB> ?dimension1.
+}"
+`;

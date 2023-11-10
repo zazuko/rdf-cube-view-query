@@ -1,61 +1,71 @@
-import { strictEqual } from 'assert'
-import ViewQuery from '../lib/query/ViewQuery/index.js'
-import { compareViewCountQuery, compareViewQuery } from './support/compareViewQuery.js'
+import chai, { expect } from 'chai'
+import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
+import { testView } from './support/testView.js'
 
 describe('query/ViewQuery', () => {
-  it('should be a constructor', () => {
-    strictEqual(typeof ViewQuery, 'function')
+  chai.use(jestSnapshotPlugin())
+
+  describe('.query', () => {
+    it('should generate a query with the given columns in the result set', async () => {
+      expect(await testView('columns')).query.toMatchSnapshot()
+    })
+
+    it('should generate a query without distinct if disableDistinct is true', async () => {
+      expect(await testView.disableDistinct('disableDistinct')).query.matchSnapshot()
+    })
+
+    it('should generate a day function filter', async () => {
+      expect(await testView('functionDay')).query.toMatchSnapshot()
+    })
+
+    it('should generate a month function filter', async () => {
+      expect(await testView('functionMonth')).query.toMatchSnapshot()
+    })
+
+    it('should generate a year function filter', async () => {
+      expect(await testView('functionYear')).query.toMatchSnapshot()
+    })
+
+    it('should generate a language filter', async () => {
+      expect(await testView('language')).query.toMatchSnapshot()
+    })
+
+    it('should generate a language filter with aggregate', async () => {
+      expect(await testView('languageMin')).query.toMatchSnapshot()
+    })
+
+    it('should generate LIMIT and OFFSET with the values given in projection/orderBy', async () => {
+      expect(await testView('limitOffset')).query.toMatchSnapshot()
+    })
+
+    it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
+      expect(await testView('orderBy')).query.toMatchSnapshot()
+    })
+
+    it('should generate a count query', async () => {
+      expect(await testView('simple')).countQuery.toMatchSnapshot()
+    })
+
+    it('should generate a count query without LIMIT and OFFSET', async () => {
+      expect(await testView('limitOffset')).countQuery.toMatchSnapshot()
+    })
+
+    it('should generate a Stardog text search filter', async () => {
+      expect(await testView('stardogTextSearch')).query.toMatchSnapshot()
+    })
+
+    it('should generate only generate query with projected columns', async () => {
+      expect(await testView('projection')).query.toMatchSnapshot()
+    })
   })
 
-  it('should generate a query with the given columns in the result set', async () => {
-    await compareViewQuery({ name: 'columns' })
-  })
+  describe('.previewQuery', () => {
+    it('should generate subquery with default limit', async () => {
+      expect(await testView('projection')).previewQuery().toMatchSnapshot()
+    })
 
-  it('should generate a query without distinct if disableDistinct is true', async () => {
-    await compareViewQuery({ disableDistinct: true, name: 'disableDistinct' })
-  })
-
-  it('should generate a day function filter', async () => {
-    await compareViewQuery({ name: 'functionDay' })
-  })
-
-  it('should generate a month function filter', async () => {
-    await compareViewQuery({ name: 'functionMonth' })
-  })
-
-  it('should generate a year function filter', async () => {
-    await compareViewQuery({ name: 'functionYear' })
-  })
-
-  it('should generate a language filter', async () => {
-    await compareViewQuery({ name: 'language' })
-  })
-
-  it('should generate a language filter with aggregate', async () => {
-    await compareViewQuery({ name: 'languageMin' })
-  })
-
-  it('should generate LIMIT and OFFSET with the values given in projection/orderBy', async () => {
-    await compareViewQuery({ name: 'limitOffset' })
-  })
-
-  it('should generate ORDER BY in the direction given in projection/orderBy', async () => {
-    await compareViewQuery({ name: 'orderBy' })
-  })
-
-  it('should generate a count query', async () => {
-    await compareViewCountQuery({ name: 'simple' })
-  })
-
-  it('should generate a count query without LIMIT and OFFSET', async () => {
-    await compareViewCountQuery({ name: 'limitOffset' })
-  })
-
-  it('should generate a Stardog text search filter', async () => {
-    await compareViewQuery({ name: 'stardogTextSearch' })
-  })
-
-  it('should generate only generate query with projected columns', async () => {
-    await compareViewQuery({ name: 'projection' })
+    it('should generate subquery with changed limit/offset', async () => {
+      expect(await testView('simple')).previewQuery({ limit: 20, offset: 80 }).toMatchSnapshot()
+    })
   })
 })
