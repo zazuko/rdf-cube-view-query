@@ -7,6 +7,7 @@ import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { cubesQuery } from '../lib/query/cubes.js'
 import Cube from '../lib/Cube.js'
 import Source from '../lib/Source.js'
+import { View } from '../index.js'
 import { buildCube } from './support/buildCube.js'
 import * as ns from './support/namespaces.js'
 import { cleanQuery } from './support/utils.js'
@@ -300,6 +301,27 @@ describe('Cube', () => {
         .addOut(ns.ex.predicate, ns.ex.down)
 
       strictEqual(ns.ex.down.equals(cube.out(ns.ex.predicate).term), true)
+    })
+  })
+
+  describe('previewQuery', () => {
+    it('creates a view query from the given cube', () => {
+      // given
+      const cube = buildCube({
+        term: ns.ex.cube,
+        endpointUrl: ns.ex.endpoint,
+        dimensions: [{
+          path: ns.ex.propertyA,
+        }, {
+          path: ns.ex.propertyB,
+        }],
+      })
+
+      // when
+      const query = View.fromCube(cube).observationsQuery().previewQuery()
+
+      // then
+      expect(cleanQuery(query.toString())).toMatchSnapshot()
     })
   })
 })

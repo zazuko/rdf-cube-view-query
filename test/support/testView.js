@@ -28,6 +28,11 @@ testView.disableDistinct = async function (name) {
 chai.Assertion.addProperty('query', function () {
   return new chai.Assertion(cleanQuery(this._obj.query.toString()))
 })
+
 chai.Assertion.addProperty('countQuery', function () {
   return new chai.Assertion(cleanQuery(this._obj.countQuery.toString()))
+})
+
+chai.Assertion.addProperty('previewQuery', function () {
+  return (arg) => new chai.Assertion(cleanQuery(this._obj.previewQuery(arg).toString()))
 })

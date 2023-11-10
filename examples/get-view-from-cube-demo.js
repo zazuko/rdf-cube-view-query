@@ -5,11 +5,11 @@ async function main() {
 #pragma join.hash off`
 
   const source = new Source({
-    endpointUrl: 'https://int.lindas.admin.ch/query',
+    endpointUrl: 'https://lindas.admin.ch/query',
     queryPrefix,
   })
 
-  const cube = await source.cube('https://ld.stadt-zuerich.ch/statistics/ZUS-BTA-ZSA')
+  const cube = await source.cube('https://environment.ld.admin.ch/foen/nfi/nfi_C-2207/cube/2023-2')
   const view = View.fromCube(cube)
 
   console.log('---------')
@@ -30,6 +30,11 @@ async function main() {
   for (const dimension of view.dimensions) {
     console.log('dimensions', dimension.cubeDimensions.map(x => x.path.value), 'from cubes', dimension.cubes.map(x => x.value))
   }
+
+  console.log('---------')
+  console.log('Sample observation')
+  const previewRows = await view.preview({ limit: 1 })
+  console.log(previewRows)
 }
 
 main()
