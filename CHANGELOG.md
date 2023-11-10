@@ -1,5 +1,24 @@
 # rdf-cube-view-query
 
+## 2.1.0
+
+### Minor Changes
+
+- a83ec4c: Added a preview method to View. The return types is same as that of `View#observations`
+
+  ```js
+  let source;
+  const cube = await source.cube("URI");
+  const view = View.fromCube(cube);
+
+  const observationPreview = view.preview({
+    // limit: 10,
+    // offset: 100
+  });
+  ```
+
+- 2bfd657: Add the ability to provide your own instance of SPARQL client when creating `Source`
+
 ## 2.0.0
 
 ### Major Changes
