@@ -2,6 +2,7 @@ import { strictEqual } from 'assert'
 import rdfHandler from '@rdfjs/express-handler'
 import withServer from 'express-as-promise/withServer.js'
 import rdf from '@zazuko/env'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import chai, { expect } from 'chai'
 import { jestSnapshotPlugin } from 'mocha-chai-jest-snapshot'
 import { cubesQuery } from '../lib/query/cubes.js'
@@ -14,6 +15,7 @@ import { cleanQuery } from './support/utils.js'
 
 describe('Cube', () => {
   chai.use(jestSnapshotPlugin())
+  const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
 
   it('should be a constructor', () => {
     strictEqual(typeof Cube, 'function')
@@ -266,14 +268,14 @@ describe('Cube', () => {
 
   describe('in', () => {
     it('should be a method', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       strictEqual(typeof cube.in, 'function')
     })
 
     it('should use clownface to search for triples pointing to the cube', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       cube.ptr
@@ -286,14 +288,14 @@ describe('Cube', () => {
 
   describe('out', () => {
     it('should be a method', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       strictEqual(typeof cube.out, 'function')
     })
 
     it('should use clownface to search for triples starting at the cube', () => {
-      const source = new Source({ endpointUrl: ns.ex.endpoint })
+      const source = new Source({ client })
       const cube = new Cube({ parent: source })
 
       cube.ptr

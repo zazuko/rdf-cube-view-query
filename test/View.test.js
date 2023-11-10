@@ -2,6 +2,7 @@ import { strictEqual, notStrictEqual, throws } from 'assert'
 import withServer from 'express-as-promise/withServer.js'
 import rdf from '@zazuko/env'
 import { Parser } from 'n3'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import Source from '../lib/Source.js'
 import View from '../lib/View.js'
 import { ViewBuilder } from '../lib/builders.js'
@@ -246,7 +247,8 @@ describe('View', () => {
           res.status(201).end()
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -266,7 +268,8 @@ describe('View', () => {
           res.status(201).end()
         })
 
-        const source = new Source({ endpointUrl: await server.listen(), queryOperation: 'postDirect' })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client, queryOperation: 'postDirect' })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -286,7 +289,8 @@ describe('View', () => {
           res.status(201).end()
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -306,7 +310,8 @@ describe('View', () => {
           res.status(201).end()
         })
 
-        const source = new Source({ endpointUrl: await server.listen(), queryPrefix: 'Some prefix' })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client, queryPrefix: 'Some prefix' })
         const view = new View({ parent: source })
         view.addDimension(
           view.createDimension({ path: ns.ex.dimension, source }))
@@ -345,7 +350,8 @@ describe('View', () => {
           })
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -374,7 +380,8 @@ describe('View', () => {
           })
         })
 
-        const source = new Source({ endpointUrl: await server.listen(), queryOperation: 'postDirect' })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client, queryOperation: 'postDirect' })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -399,7 +406,8 @@ describe('View', () => {
           })
         })
 
-        const source = new Source({ endpointUrl: await server.listen(), queryOperation: 'postDirect' })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client, queryOperation: 'postDirect' })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -428,7 +436,8 @@ describe('View', () => {
           })
         })
 
-        const source = new Source({ endpointUrl: await server.listen() })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 
@@ -457,7 +466,8 @@ describe('View', () => {
           })
         })
 
-        const source = new Source({ endpointUrl: await server.listen(), queryPrefix: 'Some prefix' })
+        const client = new ParsingClient({ endpointUrl: await server.listen() })
+        const source = new Source({ client, queryPrefix: 'Some prefix' })
         const view = new View({ parent: source })
         view.addDimension(view.createDimension({ path: ns.ex.dimension, source }))
 

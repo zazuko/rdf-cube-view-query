@@ -1,5 +1,6 @@
 import { strictEqual, deepStrictEqual } from 'assert'
 import rdf from '@zazuko/env'
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
 import Node from '../lib/Source.js'
 import { Source, Dimension, View } from '../index.js'
 import * as ns from './support/namespaces.js'
@@ -10,7 +11,8 @@ describe('Node', () => {
   })
 
   it('It clears a view', () => {
-    const source = new Source({ endpointUrl: ns.ex.endpoint, sourceGraph: ns.ex.sourceGraph })
+    const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+    const source = new Source({ client, sourceGraph: ns.ex.sourceGraph })
 
     const term = ns.ex.test
     const dataset = rdf.dataset()
@@ -36,7 +38,8 @@ describe('Node', () => {
   }
 
   it('It clears two views with filters from the same dimension', () => {
-    const source = new Source({ endpointUrl: ns.ex.endpoint, sourceGraph: ns.ex.sourceGraph })
+    const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+    const source = new Source({ client, sourceGraph: ns.ex.sourceGraph })
 
     const term = ns.ex.test
     const dataset = rdf.dataset()

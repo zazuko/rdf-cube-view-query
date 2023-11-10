@@ -69,6 +69,17 @@ Supported constructor arguments:
   See the [sparql-http-client documentation](https://zazuko.github.io/sparql-http-client/#/?id=operation) for more details.
   (default: `get` defined in `sparql-http-client`)
 
+The `endpointUrl`, `user` and `password` arguments can be replaced by a `client` instance created beforehand.
+
+```js
+import ParsingClient from 'sparql-http-client/ParsingClient.js'
+
+let endpointUrl, user, password
+const client = new ParsingClient({ endpointUrl, user, password })
+
+const source = new Source({ client })
+```
+
 #### CubeSource
 
 `CubeSource`s are used to refer to cubes.
