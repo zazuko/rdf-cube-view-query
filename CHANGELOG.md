@@ -1,5 +1,12 @@
 # rdf-cube-view-query
 
+## 2.1.1
+
+### Patch Changes
+
+- 6c30c0a: Update `@zazuko/env` to v2
+- 9f6ff37: Updated `rdf-sparql-builder` to `0.2.2`
+
 ## 2.1.0
 
 ### Minor Changes
