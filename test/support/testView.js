@@ -1,5 +1,4 @@
-import rdf from '@zazuko/env'
-import fromFile from 'rdf-utils-fs/fromFile.js'
+import rdf from '@zazuko/env-node'
 import chai from 'chai'
 import ViewQuery from '../../lib/query/ViewQuery/index.js'
 import { cleanQuery } from './utils.js'
@@ -7,7 +6,7 @@ import { cleanQuery } from './utils.js'
 async function loadView(name) {
   const filename = `test/support/${name}.ttl`
 
-  const dataset = await rdf.dataset().import(fromFile(filename))
+  const dataset = await rdf.dataset().import(rdf.fromFile(filename))
 
   const ptr = rdf.clownface({
     dataset,
