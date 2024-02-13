@@ -23,7 +23,7 @@
     "@tpluscode/rdf-string": "^1.1.3",
     "@zazuko/env": "^2.0.4",
     "commander": "^5.1.0",
-    "rdf-sparql-builder": "^0.1.10",
+    "rdf-sparql-builder": "^0.2.2",
     "sparql-http-client": "^2.2.2"
   },
   "devDependencies": {
