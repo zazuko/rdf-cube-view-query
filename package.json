@@ -27,7 +27,7 @@
     "sparql-http-client": "^3"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.0",
+    "@changesets/cli": "^2.31.0",
     "@rdfjs/express-handler": "^2.0.0",
     "@tpluscode/eslint-config": "^0.4.4",
     "@zazuko/env-node": "^2.1.1",
