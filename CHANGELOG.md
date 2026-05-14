@@ -1,5 +1,11 @@
 # rdf-cube-view-query
 
+## 3.0.0
+
+### Major Changes
+
+- bcc3462: Update sparql-http-client to v3
+
 ## 2.1.1
 
 ### Patch Changes
