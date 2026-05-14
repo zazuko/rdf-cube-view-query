@@ -24,7 +24,7 @@
     "@zazuko/env": "^2.0.4",
     "commander": "^5.1.0",
     "rdf-sparql-builder": "^0.2.2",
-    "sparql-http-client": "^2.2.2"
+    "sparql-http-client": "^3"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.0",

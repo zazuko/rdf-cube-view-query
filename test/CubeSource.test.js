@@ -15,7 +15,7 @@ describe('CubeSource', () => {
     })
 
     it('should maintain queryPrefix', async () => {
-      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint })
+      const client = new ParsingClient({ endpointUrl: ns.ex.endpoint.value })
       const source = new Source({ client, queryPrefix: 'Some prefix' })
 
       const cubeSource = CubeSource.fromSource(source, ns.ex.cube)
